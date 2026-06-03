@@ -2,7 +2,6 @@ package com.chist.notificationmodule.dto;
 
 import lombok.*;
 
-
 @Getter @Setter
 @Builder
 @NoArgsConstructor

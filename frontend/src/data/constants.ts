@@ -5,6 +5,7 @@ export const SEVERITY_META: Record<string, { label: string; color: string; bg: s
   low:      { label:"Леко",     color:"#34d399", bg:"rgba(52,211,153,0.12)", border:"rgba(52,211,153,0.3)"  },
 };
 
+
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {
   open:          { label:"Отворен",  color:"#60a5fa", bg:"rgba(96,165,250,0.12)" },
   "in-progress": { label:"В процес", color:"#f59e0b", bg:"rgba(245,158,11,0.12)" },
