@@ -3,6 +3,7 @@ package com.chist.verificationmodule.event;
 import lombok.*;
 import java.util.UUID;
 
+
 /**
  * Published to chist.events / fraud.flagged when the AI or a user
  * flags a task as potentially fraudulent.

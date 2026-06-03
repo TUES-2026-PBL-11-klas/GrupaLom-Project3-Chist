@@ -1,6 +1,5 @@
 package com.chist.userservice.dto;
 
-
 import lombok.*;
 
 @Getter
