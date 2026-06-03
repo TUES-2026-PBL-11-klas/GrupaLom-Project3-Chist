@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-user
   pullPolicy: Always
-  tag: '96d7584'
+  tag: '9ef4a43'
 
 imagePullSecrets: []
 nameOverride: ""
