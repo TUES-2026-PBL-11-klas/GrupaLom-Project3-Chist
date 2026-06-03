@@ -3,6 +3,7 @@ package com.chist.notificationmodule.event;
 import lombok.*;
 import java.util.UUID;
 
+
 // ── All incoming event DTOs live in this package ──────────────────────────────
 // They are mirrors of the DTOs published by other services. Keeping them local
 // avoids a shared-library dependency between microservices.
