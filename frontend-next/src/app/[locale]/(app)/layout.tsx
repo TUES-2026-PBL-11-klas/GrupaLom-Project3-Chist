@@ -6,9 +6,11 @@ import { NotificationBridge } from "@/components/toasts/NotificationBridge";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AppProvider>
-      <div className="min-h-screen">
+      <div className="relative min-h-screen">
+        <div className="ambient-orb-tl" aria-hidden="true" />
+        <div className="ambient-orb-br" aria-hidden="true" />
         <Navbar />
-        {children}
+        <div className="relative z-[1]">{children}</div>
         <Toaster theme="dark" position="top-right" richColors />
         <NotificationBridge />
       </div>

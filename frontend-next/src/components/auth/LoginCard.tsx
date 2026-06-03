@@ -79,12 +79,12 @@ export function LoginCard() {
   }
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-bg-card backdrop-blur p-8 shadow-2xl">
+    <div className="anim-pop-in rounded-2xl border border-brand-border bg-bg-card backdrop-blur p-8 shadow-2xl">
       <div className="flex flex-col items-center gap-2 mb-8">
         <div className="rounded-full bg-accent-pink-dim border border-accent-pink-border p-3 text-accent-pink">
           <Leaf size={28} strokeWidth={1.8} />
         </div>
-        <div className="text-text-1 text-3xl tracking-widest" style={{ fontFamily: "var(--font-display)" }}>
+        <div className="display-heading text-text-1 text-3xl">
           CHIST
         </div>
         <div className="text-text-3 text-[10px] uppercase tracking-[0.3em]">Sofia · Cleaner City</div>

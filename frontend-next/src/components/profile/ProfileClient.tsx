@@ -25,7 +25,7 @@ export function ProfileClient({ user }: { user: User }) {
   ];
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
+    <main className="anim-fade-up max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
       <ProfileHero user={user} />
 
       <div className="flex bg-bg-card rounded-md p-1 gap-1">

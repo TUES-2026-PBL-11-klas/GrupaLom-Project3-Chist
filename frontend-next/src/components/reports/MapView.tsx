@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { createRoot, type Root } from "react-dom/client";
+import { NextIntlClientProvider, useMessages, useLocale } from "next-intl";
 import { MarkerPopup } from "./MarkerPopup";
 import type { Report } from "@/lib/api/mappers";
 
@@ -64,13 +65,40 @@ function createMarkerElement(color: string, glow: string): HTMLDivElement {
   return el;
 }
 
+interface PopupEntry {
+  popup: maplibregl.Popup;
+  root: Root;
+  /** Guards against the double teardown that happens when popup.remove() fires
+   *  the "close" event our own replace path is already handling. */
+  closed: boolean;
+}
+
+/** Tears a popup down exactly once. The React root is unmounted in a microtask
+ *  rather than synchronously: maplibre fires "close" / we replace popups from
+ *  inside React effects, and calling root.unmount() while React is mid-render
+ *  throws "Attempted to synchronously unmount a root while React was already
+ *  rendering." Deferring lets the current render/commit finish first. */
+function teardownPopup(entry: PopupEntry) {
+  if (entry.closed) return;
+  entry.closed = true;
+  entry.popup.remove();
+  queueMicrotask(() => entry.root.unmount());
+}
+
 export default function MapView({ reports, selectedId, onSelectReport, locale }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
-  const popupRef = useRef<{ popup: maplibregl.Popup; root: Root } | null>(null);
+  const popupRef = useRef<PopupEntry | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const openPopupRef = useRef<(report: Report) => void>(() => {});
+
+  // The popup is mounted in a detached createRoot (maplibre owns the DOM node),
+  // so it lives outside the page's NextIntlClientProvider. Capture the active
+  // messages + locale here and re-provide them inside that root, otherwise the
+  // useTranslations() calls in MarkerPopup throw "no intl context found".
+  const messages = useMessages();
+  const intlLocale = useLocale();
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -90,6 +118,10 @@ export default function MapView({ reports, selectedId, onSelectReport, locale }:
     mapRef.current = map;
     map.on("load", () => setMapLoaded(true));
     return () => {
+      if (popupRef.current) {
+        teardownPopup(popupRef.current);
+        popupRef.current = null;
+      }
       map.remove();
       mapRef.current = null;
     };
@@ -99,13 +131,16 @@ export default function MapView({ reports, selectedId, onSelectReport, locale }:
     const map = mapRef.current;
     if (!map) return;
     if (popupRef.current) {
-      popupRef.current.popup.remove();
-      popupRef.current.root.unmount();
+      teardownPopup(popupRef.current);
       popupRef.current = null;
     }
     const popupNode = document.createElement("div");
     const root = createRoot(popupNode);
-    root.render(<MarkerPopup report={report} locale={locale} />);
+    root.render(
+      <NextIntlClientProvider locale={intlLocale} messages={messages}>
+        <MarkerPopup report={report} locale={locale} />
+      </NextIntlClientProvider>
+    );
     const popup = new maplibregl.Popup({
       offset: [0, -58],
       closeButton: true,
@@ -116,12 +151,14 @@ export default function MapView({ reports, selectedId, onSelectReport, locale }:
       .setLngLat([report.lng, report.lat])
       .setDOMContent(popupNode)
       .addTo(map);
+    const entry: PopupEntry = { popup, root, closed: false };
     popup.on("close", () => {
-      root.unmount();
-      if (popupRef.current?.popup === popup) popupRef.current = null;
+      // User dismissed via the popup's close button — tear down the same way.
+      if (popupRef.current === entry) popupRef.current = null;
+      teardownPopup(entry);
     });
-    popupRef.current = { popup, root };
-  }, [locale]);
+    popupRef.current = entry;
+  }, [locale, intlLocale, messages]);
 
   openPopupRef.current = openPopup;
 

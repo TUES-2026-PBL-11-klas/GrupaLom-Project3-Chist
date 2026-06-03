@@ -33,8 +33,8 @@ export function LeaderboardClient({ users, me }: Props) {
   const top3 = sorted.slice(0, 3);
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-5">
-      <h1 className="text-text-1 text-xl tracking-widest" style={{ fontFamily: "var(--font-display)" }}>
+    <main className="anim-fade-up max-w-3xl mx-auto px-4 py-6 flex flex-col gap-5">
+      <h1 className="display-heading text-text-1 text-xl">
         {t("title")}
       </h1>
 

@@ -30,8 +30,9 @@ export function Navbar() {
           <span className="rounded-full bg-accent-pink-dim border border-accent-pink-border p-1.5 text-accent-pink">
             <Leaf size={16} strokeWidth={1.8} />
           </span>
-          <span className="text-text-1 text-xl tracking-widest" style={{ fontFamily: "var(--font-display)" }}>
-            CHIST
+          <span className="flex flex-col leading-none">
+            <span className="display-heading text-text-1 text-xl">CHIST</span>
+            <span className="text-text-3 text-[9px] uppercase tracking-[0.3em] mt-0.5">Sofia · Beta</span>
           </span>
         </Link>
 
