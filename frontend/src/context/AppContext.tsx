@@ -1,7 +1,6 @@
 import { createContext, useContext, useReducer, useCallback, useRef, useEffect } from "react";
 import { usersApi, reportsApi } from "../services/api.ts";
 
-
 interface Report {
   id: string;
   reportId?: string;
