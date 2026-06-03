@@ -5,6 +5,7 @@ import "../styles/CleanModal.css";
 import { SEVERITY_META } from "../data/constants.ts";
 import { useApp } from "../context/AppContext.tsx";
 
+
 interface CleanModalReport {
   id: string | number;
   title: string;
