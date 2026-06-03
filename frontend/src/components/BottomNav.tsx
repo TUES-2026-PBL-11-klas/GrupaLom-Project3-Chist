@@ -9,6 +9,7 @@ const TABS = [
   { id: "profile", icon: User, label: "Профил" },
 ];
 
+
 interface BottomNavProps {
   active: string;
   onChange: (id: string) => void;
