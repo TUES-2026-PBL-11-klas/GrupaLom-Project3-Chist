@@ -18,6 +18,7 @@ interface MapDashboardProps {
 export default function MapDashboard({ onNavigate, currentTab, lang, onToggleLang }: MapDashboardProps) {
   const { reports, claimReport, completeReport, selectedReportId, selectReport } = useApp();
 
+  
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
