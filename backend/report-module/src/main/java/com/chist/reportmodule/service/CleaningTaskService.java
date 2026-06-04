@@ -69,7 +69,6 @@ public class CleaningTaskService {
         return mapToDTO(cleaningTaskRepository.save(cleaningTask));
     }
 
-
     private CleaningTaskResponse mapToDTO(CleaningTask cleaningTask){
         return CleaningTaskResponse.builder()
                 .task_id(cleaningTask.getId())
