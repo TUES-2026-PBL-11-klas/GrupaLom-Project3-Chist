@@ -53,6 +53,7 @@ interface User {
   joined: string;
 }
 
+
 interface Notification {
   id: number;
   type?: string;
