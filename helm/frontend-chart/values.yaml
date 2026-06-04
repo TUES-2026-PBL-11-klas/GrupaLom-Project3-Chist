@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-frontend
   pullPolicy: Always
-  tag: '884ffd8'
+  tag: 'e5cf7f0'
 
 env:
   VITE_API_URL: "http://user-module:8080"
