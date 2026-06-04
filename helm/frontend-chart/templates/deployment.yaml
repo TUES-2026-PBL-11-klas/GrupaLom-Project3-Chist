@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend-chart.fullname" . }}
+  name: {{ include "frontend-chart.fullname" . }}
   labels:
-    {{- include "backend-chart.labels" . | nindent 4 }}
+    {{- include "frontend-chart.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -16,7 +16,7 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      {{- include "backend-chart.selectorLabels" . | nindent 6 }}
+      {{- include "frontend-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -24,7 +24,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "backend-chart.labels" . | nindent 8 }}
+        {{- include "frontend-chart.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -33,7 +33,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "backend-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "frontend-chart.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

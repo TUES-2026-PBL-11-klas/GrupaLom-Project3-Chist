@@ -37,7 +37,6 @@ interface FeedItem {
   type: string;
 }
 
-
 interface User {
   id: string;
   name: string;
