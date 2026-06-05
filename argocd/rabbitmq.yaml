@@ -13,6 +13,10 @@ spec:
     targetRevision: 14.6.6
     helm:
       values: |
+        image:
+          registry: public.ecr.aws
+          repository: bitnami/rabbitmq
+          tag: 3.13.6-debian-12-r1
         auth:
           username: chist
           existingPasswordSecret: rabbitmq-secret
@@ -38,4 +42,3 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-

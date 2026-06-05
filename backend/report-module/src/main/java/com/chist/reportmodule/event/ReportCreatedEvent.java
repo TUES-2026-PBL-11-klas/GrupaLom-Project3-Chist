@@ -4,7 +4,6 @@ package com.chist.reportmodule.event;
 import lombok.*;
 import java.util.UUID;
 
-
 /** Published to chist.events / report.created when a new report is submitted. */
 @Data
 @NoArgsConstructor
