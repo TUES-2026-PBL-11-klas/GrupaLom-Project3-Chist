@@ -3,7 +3,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = var.location
   resource_group_name = var.rg_name
   dns_prefix          = "${var.project_name}-${var.environment}"
-  kubernetes_version  = "1.33"
+  kubernetes_version  = "1.33.0"
   sku_tier            = "Free"
 
   default_node_pool {
@@ -12,7 +12,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     node_count                  = 1
     vm_size                     = var.aks_node_vm_size
     vnet_subnet_id              = var.aks_subnet_id
-    orchestrator_version        = "1.33"
+    orchestrator_version        = "1.33.0"
     max_pods                    = 60
   }
 

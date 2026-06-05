@@ -103,7 +103,8 @@ module "kubernetes" {
   kube_client_key         = module.aks.kube_client_key
   kube_ca_certificate     = module.aks.kube_ca_certificate
 
-  key_vault_name = module.akv.key_vault_name
+  key_vault_name       = module.akv.key_vault_name
+  cors_allowed_origins = var.cors_allowed_origins
 
   depends_on = [module.aks, module.akv, module.cognitive]
 }
