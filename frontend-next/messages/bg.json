@@ -56,7 +56,10 @@
   "Reports": {
     "signalsCount": "{n} сигнала",
     "noMatch": "Няма сигнали отговарящи на филтрите.",
-    "loadingMap": "Зареждане на картата…"
+    "loadingMap": "Зареждане на картата…",
+    "streakDays": "{n}-дневна серия",
+    "streakLabel": "Серия",
+    "signalsLabel": "Сигнали"
   },
   "ReportDetail": {
     "back": "обратно към сигналите",

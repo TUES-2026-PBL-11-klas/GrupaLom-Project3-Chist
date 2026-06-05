@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { Flame } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useApp } from "@/context/AppContext";
 import { ReportCard } from "./ReportCard";
-import type { Report } from "@/lib/api/mappers";
+import type { Report, User } from "@/lib/api/mappers";
 
 const MapView = dynamic(() => import("./MapView"), {
   ssr: false,
@@ -17,10 +18,11 @@ const MapView = dynamic(() => import("./MapView"), {
 
 interface ReportsClientProps {
   initialReports: Report[];
+  user: User | null;
   locale: string;
 }
 
-export function ReportsClient({ initialReports, locale }: ReportsClientProps) {
+export function ReportsClient({ initialReports, user, locale }: ReportsClientProps) {
   const t = useTranslations("Reports");
   const { selectedReportId, selectReport, filters } = useApp();
 
@@ -31,11 +33,22 @@ export function ReportsClient({ initialReports, locale }: ReportsClientProps) {
   });
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-3.5rem)] p-4">
-      <aside className="w-full md:w-[360px] flex flex-col gap-2 overflow-y-auto">
-        <div className="text-text-3 text-xs uppercase tracking-wider px-1">
-          {t("signalsCount", { n: filtered.length })}
+    <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-4rem)] p-4">
+      <aside className="w-full md:w-[360px] flex flex-col gap-3 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-xl border border-brand-border bg-bg-card px-3 py-2.5">
+            <div className="text-text-1 text-xl leading-none">{filtered.length}</div>
+            <div className="text-text-3 text-[10px] uppercase tracking-wider mt-1">{t("signalsLabel")}</div>
+          </div>
+          <div className="rounded-xl border border-accent-pink-border bg-accent-pink-dim px-3 py-2.5 flex items-center gap-2">
+            <span className="text-accent-pink"><Flame size={18} strokeWidth={2} /></span>
+            <div>
+              <div className="text-text-1 text-xl leading-none">{user?.streak ?? 0}</div>
+              <div className="text-text-3 text-[10px] uppercase tracking-wider mt-1">{t("streakLabel")}</div>
+            </div>
+          </div>
         </div>
+
         {filtered.map((r) => (
           <ReportCard
             key={r.id}

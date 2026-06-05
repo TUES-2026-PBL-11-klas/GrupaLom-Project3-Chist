@@ -56,7 +56,10 @@
   "Reports": {
     "signalsCount": "{n} signals",
     "noMatch": "No reports match the current filters.",
-    "loadingMap": "Loading map…"
+    "loadingMap": "Loading map…",
+    "streakDays": "{n}-day streak",
+    "streakLabel": "Streak",
+    "signalsLabel": "Signals"
   },
   "ReportDetail": {
     "back": "back to reports",
