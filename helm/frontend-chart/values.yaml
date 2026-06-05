@@ -1,87 +1,71 @@
 replicaCount: 1
-
 image:
-  repository: acrchistdev.azurecr.io/chist-frontend
+  repository: acrchistdev.azurecr.io/chist-frontend-next
   pullPolicy: Always
-  tag: '7017bfd'
-
-
+  tag: "latest"
+containerPort: 3000
 env:
-  - name: VITE_API_URL
-    value: "http://user-module:8080"
-
+  NODE_ENV: "production"
+  NEXT_TELEMETRY_DISABLED: "1"
+  BACKEND_URL: "http://user-module:8080"
+  AUTH_COOKIE_SECURE: "true"
+  NEXT_PUBLIC_DEFAULT_LOCALE: "bg"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 serviceAccount:
   create: true
   automount: true
   annotations: {}
   name: ""
-
 podAnnotations: {}
 podLabels: {}
 podSecurityContext: {}
 securityContext: {}
-
 service:
   type: ClusterIP
   port: 80
-
-# 2. Поправка на структурата на ingress пътя спрямо съвременните Helm изисквания
+  targetPort: 3000
 ingress:
   enabled: true
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   hosts:
-    - host: "20.240.6.13.nip.io"
+    - host: "4.165.174.62.nip.io"
       paths:
         - path: /
           pathType: Prefix
-          backend:
-            service:
-              name: frontend-frontend-chart
-              port:
-                number: 80
+          servicePort: 80
   tls: []
-
 resources:
   requests:
-    cpu: 50m
-    memory: 128Mi
-  limits:
-    cpu: 200m
+    cpu: 100m
     memory: 256Mi
-
+  limits:
+    cpu: 500m
+    memory: 512Mi
 livenessProbe:
   httpGet:
-    path: /
-    port: 80
+    path: /api/health
+    port: 3000
   initialDelaySeconds: 10
-  periodSeconds: 15
-  failureThreshold: 3
-
+  periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /
-    port: 80
-  initialDelaySeconds: 10
-  periodSeconds: 15
-  threshold: 1 # променено на валидно за k8s поле (вместо failureThreshold повторено)
-
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
-
 volumes: []
 volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
 httpRoute:
   enabled: false

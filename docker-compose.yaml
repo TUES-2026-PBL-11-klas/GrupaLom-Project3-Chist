@@ -95,11 +95,17 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend-next
       dockerfile: Dockerfile
     container_name: chist-frontend
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      BACKEND_URL: http://user-module:8080
+      AUTH_COOKIE_SECURE: "false"
+      NEXT_PUBLIC_DEFAULT_LOCALE: bg
     depends_on:
       - user-module
       - report-module

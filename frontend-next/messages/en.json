@@ -1,0 +1,207 @@
+{
+  "Home": {
+    "title": "CHIST",
+    "subtitle": "Sofia · Cleaner City"
+  },
+  "Auth": {
+    "tabs": { "login": "LOG IN", "register": "REGISTER" },
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "username": "Username",
+    "usernamePlaceholder": "GreenWarrior99",
+    "confirmPassword": "Confirm password",
+    "minPasswordHint": "min. 8 characters",
+    "submitLogin": "LOG IN",
+    "submitRegister": "CREATE ACCOUNT",
+    "submitting": "Submitting...",
+    "errorRequired": "Fill in all fields.",
+    "errorMismatch": "Passwords don't match.",
+    "errorMinLength": "Password must be at least 8 characters.",
+    "errorGeneric": "Something went wrong. Try again.",
+    "switchToRegister": "Don't have an account? REGISTER →",
+    "switchToLogin": "← ALREADY HAVE AN ACCOUNT",
+    "brandTagline": "Spot it. Report it. Clean it.",
+    "brandBullets": {
+      "report": "Report litter and dumping across Sofia in seconds",
+      "earn": "Earn points, badges and streaks for every cleanup",
+      "compete": "Climb the city leaderboard with your district"
+    }
+  },
+  "Nav": {
+    "reports": "REPORTS",
+    "leaderboard": "LEADERBOARD",
+    "profile": "PROFILE",
+    "rewards": "REWARDS",
+    "newReport": "NEW REPORT",
+    "logout": "LOG OUT"
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "bg": "Bulgarian",
+    "en": "English"
+  },
+  "Severity": {
+    "critical": "CRITICAL",
+    "high": "HIGH",
+    "medium": "MEDIUM",
+    "low": "LOW"
+  },
+  "Status": {
+    "open": "OPEN",
+    "inProgress": "IN PROGRESS",
+    "done": "DONE"
+  },
+  "Reports": {
+    "signalsCount": "{n} signals",
+    "noMatch": "No reports match the current filters.",
+    "loadingMap": "Loading map…",
+    "streakDays": "{n}-day streak",
+    "streakLabel": "Streak",
+    "signalsLabel": "Signals"
+  },
+  "ReportDetail": {
+    "back": "back to reports",
+    "claim": "Claim",
+    "markComplete": "Mark complete",
+    "confirmSighting": "Confirm sighting",
+    "unknownReporter": "—",
+    "openLink": "OPEN →"
+  },
+  "Levels": {
+    "novice": "NOVICE",
+    "active": "ACTIVE",
+    "pro": "PRO",
+    "master": "MASTER",
+    "legend": "LEGEND"
+  },
+  "Rewards": {
+    "title": "REWARDS",
+    "hero": {
+      "balanceLabel": "AVAILABLE POINTS",
+      "chistPoints": "CHIST POINTS",
+      "cleanings": "CLEANINGS",
+      "reports": "REPORTS",
+      "streak": "STREAK"
+    },
+    "tabs": {
+      "shop": "SHOP",
+      "history": "HISTORY"
+    },
+    "categories": {
+      "all": "ALL",
+      "food": "FOOD",
+      "eco": "ECO",
+      "transport": "TRANSPORT",
+      "experience": "EXPERIENCE",
+      "status": "STATUS"
+    },
+    "card": {
+      "taken": "TAKEN",
+      "moreNeeded": "{n} more points",
+      "hot": "HOT",
+      "new": "NEW"
+    },
+    "claim": {
+      "confirmTitle": "Confirm reward",
+      "partner": "Partner: {name}",
+      "points": "{n} points",
+      "cancel": "Cancel",
+      "confirm": "Claim",
+      "success": "{name} — claimed!"
+    },
+    "history": {
+      "empty": "No history yet"
+    }
+  },
+  "RewardCatalog": {
+    "1": { "name": "Free coffee",          "desc": "One free drink at partner cafes in Sofia.",                   "partner": "COSTA COFFEE · STARBUCKS" },
+    "2": { "name": "Plant a tree",         "desc": "We plant a tree in your name in a Sofia park.",              "partner": "SOFIA GREEN INITIATIVE" },
+    "3": { "name": "Free transit",         "desc": "1-month city transit pass.",                                 "partner": "SOFIA URBAN MOBILITY CENTER" },
+    "4": { "name": "20% off meal",         "desc": "20% off at partner restaurants.",                            "partner": "HAPPY · HAPPY BAR & GRILL" },
+    "5": { "name": "Eco product pack",     "desc": "Set of biodegradable products from SofiaEco.",               "partner": "SOFIAECO STORE" },
+    "6": { "name": "Verified User status", "desc": "Official VRF badge and 2x points per task.",                 "partner": "CHIST PLATFORM" },
+    "7": { "name": "Concert / Event",      "desc": "2 free tickets to a partner event in Sofia.",                "partner": "SOFIA LIVE" },
+    "8": { "name": "Cleanup kit",          "desc": "Professional eco cleanup kit.",                              "partner": "ECO TOOLS BG" }
+  },
+  "Badges": {
+    "unlocked": "{earned} / {total} UNLOCKED",
+    "first_report":  { "name": "First report",     "desc": "Reported your first cleanup" },
+    "first_clean":   { "name": "First cleanup",    "desc": "Completed your first cleanup" },
+    "streak_7":      { "name": "7-day streak",     "desc": "Active 7 days in a row" },
+    "clean_10":      { "name": "10 cleanups",      "desc": "Completed 10 successful cleanups" },
+    "verified":      { "name": "Verified User",    "desc": "Proven activity and reliability" },
+    "eco_legend":    { "name": "Eco legend",       "desc": "Reach 5000 points" },
+    "district_hero": { "name": "District hero",    "desc": "Cleaned 5 sites in one district" },
+    "team_player":   { "name": "Team player",      "desc": "Confirmed 20 tasks by others" }
+  },
+  "Profile": {
+    "verified": "VERIFIED",
+    "xpToNext": "To next level",
+    "tabs": {
+      "stats": "STATS",
+      "badges": "BADGES",
+      "activity": "ACTIVITY",
+      "settings": "SETTINGS"
+    },
+    "stats": {
+      "points": "POINTS",
+      "cleanings": "CLEANINGS",
+      "reports": "REPORTS",
+      "totalPoints": "TOTAL POINTS",
+      "streakRecord": "STREAK RECORD",
+      "streakDays": "{n} days"
+    },
+    "activity": {
+      "last4weeks": "Last 4 weeks",
+      "days": { "mon": "M", "tue": "T", "wed": "W", "thu": "T", "fri": "F", "sat": "S", "sun": "S" }
+    },
+    "settings": {
+      "pushNotifs": "Push notifications",
+      "pushNotifsDesc": "Browser alerts on new reports",
+      "gps": "GPS",
+      "gpsDesc": "Location when filing a report",
+      "emails": "Email",
+      "emailsDesc": "Weekly digest",
+      "logout": "LOG OUT"
+    }
+  },
+  "Leaderboard": {
+    "title": "LEADERBOARD",
+    "yourPosition": "YOUR POSITION",
+    "you": "YOU",
+    "tabs": {
+      "awards": "AWARDS",
+      "cleanings": "CLEANINGS",
+      "points": "POINTS"
+    },
+    "labels": {
+      "awards": "AWARDS",
+      "cleanings": "CLEANINGS",
+      "points": "POINTS"
+    }
+  },
+  "NewReport": {
+    "title": "NEW SIGNAL",
+    "back": "back",
+    "description": "Description",
+    "descriptionPlaceholder": "What did you see?",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "severity": "Severity",
+    "severityCritical": "Critical",
+    "severityHigh": "High",
+    "severityMedium": "Medium",
+    "severityLow": "Low",
+    "photo": "Photo (optional)",
+    "submit": "Submit report",
+    "submitting": "Submitting...",
+    "failure": "Submission failed",
+    "pickLocation": "Location",
+    "pickLocationHint": "Click the map to drop a pin",
+    "useMyLocation": "Use my location",
+    "locating": "Locating…",
+    "locationError": "Could not get your location"
+  }
+}

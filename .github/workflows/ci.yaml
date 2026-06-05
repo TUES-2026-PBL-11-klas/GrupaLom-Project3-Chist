@@ -36,7 +36,7 @@ jobs:
             verification:
               - 'backend/verification-module/**'
             frontend:
-              - 'frontend/**'
+              - 'frontend-next/**'
 
   build-user:
     name: Build user-module (validate only)
@@ -112,8 +112,8 @@ jobs:
       - uses: docker/setup-buildx-action@v3
       - uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./frontend-next
+          file: ./frontend-next/Dockerfile
           push: false
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
