@@ -25,30 +25,37 @@ export function ProfileClient({ user }: { user: User }) {
   ];
 
   return (
-    <main className="anim-fade-up max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
-      <ProfileHero user={user} />
-
-      <div className="flex bg-bg-card rounded-md p-1 gap-1">
-        {TABS.map((tt) => (
-          <button
-            key={tt.id}
-            onClick={() => setTab(tt.id)}
-            className={`flex-1 py-2 rounded text-xs uppercase tracking-wider transition ${
-              tab === tt.id ? "bg-accent-pink text-bg-base" : "text-text-2 hover:text-text-1"
-            }`}
-          >
-            {tt.label}
-          </button>
-        ))}
+    <main className="anim-fade-up max-w-6xl mx-auto px-4 lg:px-8 py-8 grid lg:grid-cols-[minmax(0,380px)_1fr] gap-6 items-start">
+      {/* Left: identity panel */}
+      <div className="flex flex-col gap-5 lg:sticky lg:top-20">
+        <ProfileHero user={user} />
+        <XpBar user={user} />
+        <StatCards user={user} />
       </div>
 
-      <XpBar user={user} />
-      <StatCards user={user} />
+      {/* Right: tabbed content */}
+      <div className="flex flex-col gap-5">
+        <div className="flex bg-bg-card rounded-md p-1 gap-1">
+          {TABS.map((tt) => (
+            <button
+              key={tt.id}
+              onClick={() => setTab(tt.id)}
+              className={`flex-1 py-2 rounded text-xs uppercase tracking-wider transition ${
+                tab === tt.id ? "bg-accent-pink text-bg-base" : "text-text-2 hover:text-text-1"
+              }`}
+            >
+              {tt.label}
+            </button>
+          ))}
+        </div>
 
-      {tab === "stats"    && <StatBars user={user} />}
-      {tab === "badges"   && <BadgeGrid user={user} />}
-      {tab === "activity" && <ActivityChart />}
-      {tab === "settings" && <SettingsPanel />}
+        <div className="rounded-2xl border border-brand-border bg-bg-card p-5 min-h-[300px]">
+          {tab === "stats"    && <StatBars user={user} />}
+          {tab === "badges"   && <BadgeGrid user={user} />}
+          {tab === "activity" && <ActivityChart />}
+          {tab === "settings" && <SettingsPanel />}
+        </div>
+      </div>
     </main>
   );
 }
