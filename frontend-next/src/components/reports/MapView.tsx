@@ -215,10 +215,10 @@ export default function MapView({ reports, selectedId, onSelectReport, locale }:
           background: transparent !important;
           padding: 0 !important;
           border-radius: 16px !important;
-          box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 40px rgba(255,77,148,0.2) !important;
+          box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 36px rgba(255,77,148,0.18) !important;
           overflow: hidden;
         }
-        .chist-popup .maplibregl-popup-tip { border-top-color: #0F172A !important; }
+        .chist-popup .maplibregl-popup-tip { border-top-color: var(--color-bg-surface) !important; }
         .chist-popup .maplibregl-popup-close-button {
           color: rgba(255,255,255,0.4) !important;
           font-size: 20px !important;
