@@ -40,7 +40,7 @@ export function RewardCard({ reward, userPoints, claimed, onClaim }: Props) {
           <Sparkles size={10} strokeWidth={2} /> {tCard("new")}
         </span>
       )}
-      <div className="text-2xl">★</div>
+      <div className="text-accent-pink"><Star size={24} strokeWidth={1.8} className="fill-current" /></div>
       <div className="text-text-1 text-sm">{tCat(`${idKey}.name` as `${string}.name`)}</div>
       <div className="text-text-3 text-xs leading-snug">{tCat(`${idKey}.desc` as `${string}.desc`)}</div>
       <div className="text-text-3 text-[0.625rem] uppercase tracking-wider">{tCat(`${idKey}.partner` as `${string}.partner`)}</div>

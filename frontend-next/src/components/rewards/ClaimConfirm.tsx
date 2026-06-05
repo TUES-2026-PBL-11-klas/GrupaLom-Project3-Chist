@@ -25,7 +25,7 @@ export function ClaimConfirm({ reward, onConfirm, onCancel }: Props) {
             <DialogHeader>
               <DialogTitle>{tClaim("confirmTitle")}</DialogTitle>
             </DialogHeader>
-            <div className="text-2xl">★</div>
+            <div className="text-accent-pink"><Star size={24} strokeWidth={1.8} className="fill-current" /></div>
             <div className="text-text-1 text-sm">
               <strong>{tCat(`${idKey}.name` as `${string}.name`)}</strong>
               <p className="mt-1 text-text-2">{tCat(`${idKey}.desc` as `${string}.desc`)}</p>
