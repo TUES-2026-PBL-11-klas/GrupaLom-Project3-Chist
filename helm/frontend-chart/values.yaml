@@ -7,7 +7,7 @@ containerPort: 3000
 env:
   NODE_ENV: "production"
   NEXT_TELEMETRY_DISABLED: "1"
-  AUTH_COOKIE_SECURE: "true"
+  AUTH_COOKIE_SECURE: "false"
   NEXT_PUBLIC_DEFAULT_LOCALE: "bg"
   # Per-module backend bases (in-cluster ClusterIP DNS, include /api).
   # serverFetch routes by path prefix; BACKEND_URL is the fallback.
