@@ -103,7 +103,12 @@ services:
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
-      BACKEND_URL: http://user-module:8080
+      # Per-module backend bases; serverFetch routes by path prefix.
+      USER_API_URL: http://user-module:8080/api
+      REPORT_API_URL: http://report-module:8081/api
+      NOTIFICATION_API_URL: http://notification-module:8082/api
+      VERIFICATION_API_URL: http://verification-module:8083/api
+      BACKEND_URL: http://user-module:8080/api
       AUTH_COOKIE_SECURE: "false"
       NEXT_PUBLIC_DEFAULT_LOCALE: bg
     depends_on:

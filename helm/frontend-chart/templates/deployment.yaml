@@ -77,10 +77,6 @@ spec:
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}
           {{- end }}
-          {{- if .Values.env }}
-          env:
-            {{- toYaml .Values.env | nindent 12 }}
-          {{- end }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

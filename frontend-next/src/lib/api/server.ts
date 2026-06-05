@@ -1,6 +1,7 @@
 import "server-only";
 import { getSessionToken, MOCK_DEV_TOKEN } from "@/lib/auth/session";
 import { mockResponse } from "@/lib/mock/dispatcher";
+import { resolveBackendBase } from "./backend-url";
 import { ApiError, UnauthorizedError } from "./errors";
 
 export async function serverFetch<T = unknown>(path: string, init?: RequestInit): Promise<T> {
@@ -16,7 +17,7 @@ export async function serverFetch<T = unknown>(path: string, init?: RequestInit)
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...((init?.headers ?? {}) as Record<string, string>),
     };
-    res = await fetch(`${process.env.BACKEND_URL}${path}`, {
+    res = await fetch(`${resolveBackendBase(path)}${path}`, {
       ...init,
       headers,
       cache: "no-store",
