@@ -4,7 +4,7 @@ applications:
     namespace: argocd
     project: default
     source:
-      repoURL: https://github.com/TUES-2026-PBL-11-klas/Grupa-Lom-Project2-Chist
+      repoURL: https://github.com/TUES-2026-PBL-11-klas/GrupaLom-Project3-Chist
       targetRevision: main
       path: argocd
     destination:
