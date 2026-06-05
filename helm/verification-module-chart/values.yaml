@@ -39,17 +39,17 @@ livenessProbe:
   httpGet:
     path: /actuator/health
     port: 8083
-  initialDelaySeconds: 90
+  initialDelaySeconds: 150
   periodSeconds: 15
-  failureThreshold: 5
+  failureThreshold: 10
 
 readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8083
-  initialDelaySeconds: 90
+  initialDelaySeconds: 150
   periodSeconds: 15
-  failureThreshold: 5
+  failureThreshold: 10
 
 autoscaling:
   enabled: false
