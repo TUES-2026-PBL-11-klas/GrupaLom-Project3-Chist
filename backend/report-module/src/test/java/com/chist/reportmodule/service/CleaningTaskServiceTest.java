@@ -114,4 +114,56 @@ class CleaningTaskServiceTest {
         assertNotNull(response);
         assertEquals(TaskStatus.COMPLETED, testTask.getStatus());
     }
+
+    @Test
+    void getTaskById_notFound_throwsException() {
+        when(cleaningTaskRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(ReportOrTaskNotFoundException.class,
+                () -> cleaningTaskService.getCleaningTaskById(testId));
+    }
+
+    @Test
+    void uploadPhotos_success() {
+        when(cleaningTaskRepository.findById(testId)).thenReturn(Optional.of(testTask));
+        when(cleaningTaskRepository.save(any(CleaningTask.class))).thenReturn(testTask);
+
+        CleaningTaskResponse response = cleaningTaskService.uploadPhotos(
+                testId, "before.jpg", "after.jpg");
+
+        assertEquals(TaskStatus.IN_PROGRESS, testTask.getStatus());
+        assertEquals("before.jpg", testTask.getBeforePhoto());
+        assertEquals("after.jpg", testTask.getAfterPhoto());
+        assertNotNull(response);
+    }
+
+    @Test
+    void uploadPhotos_notFound_throwsException() {
+        when(cleaningTaskRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(ReportOrTaskNotFoundException.class,
+                () -> cleaningTaskService.uploadPhotos(testId, "before.jpg", "after.jpg"));
+    }
+
+    @Test
+    void completeTask_updatesReportToCleaned() {
+        when(cleaningTaskRepository.findById(testId)).thenReturn(Optional.of(testTask));
+        when(cleaningTaskRepository.save(any(CleaningTask.class))).thenReturn(testTask);
+
+        cleaningTaskService.completeTask(testId);
+
+        assertEquals(ReportStatus.CLEANED, testTask.getReport().getStatus());
+        verify(reportRepository).save(testReport);
+    }
+
+    @Test
+    void completeTask_notFound_throwsException() {
+        when(cleaningTaskRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(ReportOrTaskNotFoundException.class,
+                () -> cleaningTaskService.completeTask(testId));
+    }
+
+    @Test
+    void getTasksByCleanerId_emptyList() {
+        when(cleaningTaskRepository.findByCleanerId(testCleanerId)).thenReturn(List.of());
+        assertTrue(cleaningTaskService.getCleaningTaskByCleanerId(testCleanerId).isEmpty());
+    }
 }
