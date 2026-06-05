@@ -12,16 +12,12 @@ provider "azurerm" {
 
 provider "helm" {
   kubernetes {
-    host                   = try(module.aks.kube_host, "")
-    client_certificate     = try(base64decode(module.aks.kube_client_certificate), "")
-    client_key             = try(base64decode(module.aks.kube_client_key), "")
-    cluster_ca_certificate = try(base64decode(module.aks.kube_ca_certificate), "")
+    config_path    = pathexpand("~/.kube/config")
+    config_context = "aks-chist-dev"
   }
 }
 
 provider "kubernetes" {
-  host                   = try(module.aks.kube_host, "")
-  client_certificate     = try(base64decode(module.aks.kube_client_certificate), "")
-  client_key             = try(base64decode(module.aks.kube_client_key), "")
-  cluster_ca_certificate = try(base64decode(module.aks.kube_ca_certificate), "")
+  config_path    = pathexpand("~/.kube/config")
+  config_context = "aks-chist-dev"
 }
