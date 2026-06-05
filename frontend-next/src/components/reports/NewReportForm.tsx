@@ -36,7 +36,7 @@ export function NewReportForm() {
 
   function useMyLocation() {
     if (!("geolocation" in navigator)) {
-      setError(t("locationError"));
+      setError(t("locationErrorHttps"));
       return;
     }
     setLocating(true);
@@ -46,8 +46,10 @@ export function NewReportForm() {
         setLng(clampLng(pos.coords.longitude));
         setLocating(false);
       },
-      () => {
-        setError(t("locationError"));
+      (err) => {
+        // Code 1 = PERMISSION_DENIED; Chrome blocks geolocation on plain HTTP.
+        const msg = err.code === 1 ? t("locationErrorHttps") : t("locationError");
+        setError(msg);
         setLocating(false);
       },
       { enableHighAccuracy: true, timeout: 10000 }

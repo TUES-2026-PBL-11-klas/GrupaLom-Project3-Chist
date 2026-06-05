@@ -202,6 +202,7 @@
     "pickLocationHint": "Click the map to drop a pin",
     "useMyLocation": "Use my location",
     "locating": "Locating…",
-    "locationError": "Could not get your location"
+    "locationError": "Could not get your location",
+    "locationErrorHttps": "Location requires HTTPS. Use the map to pin your location manually."
   }
 }

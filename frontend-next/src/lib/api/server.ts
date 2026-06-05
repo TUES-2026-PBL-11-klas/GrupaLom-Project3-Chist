@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { getSessionToken, MOCK_DEV_TOKEN } from "@/lib/auth/session";
 import { mockResponse } from "@/lib/mock/dispatcher";
 import { resolveBackendBase } from "./backend-url";
@@ -15,6 +16,21 @@ function extractUuidFromJwt(token: string): string | null {
   }
 }
 
+// Memoized per request — only hits /users/me once when the JWT lacks the uuid claim (old tokens).
+const fetchUserIdFromApi = cache(async (token: string): Promise<string | null> => {
+  try {
+    const res = await fetch(`${process.env.USER_API_URL}/users/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return typeof data.id === "string" ? data.id : null;
+  } catch {
+    return null;
+  }
+});
+
 export async function serverFetch<T = unknown>(path: string, init?: RequestInit): Promise<T> {
   const token = await getSessionToken();
 
@@ -23,7 +39,10 @@ export async function serverFetch<T = unknown>(path: string, init?: RequestInit)
     res = mockResponse(path, init);
   } else {
     const isFormData = init?.body instanceof FormData;
-    const userId = token ? extractUuidFromJwt(token) : null;
+    let userId = token ? extractUuidFromJwt(token) : null;
+    if (token && !userId) {
+      userId = await fetchUserIdFromApi(token);
+    }
     const headers: Record<string, string> = {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
