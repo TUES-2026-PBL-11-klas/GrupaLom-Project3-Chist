@@ -21,7 +21,13 @@
     "errorMinLength": "Password must be at least 8 characters.",
     "errorGeneric": "Something went wrong. Try again.",
     "switchToRegister": "Don't have an account? REGISTER →",
-    "switchToLogin": "← ALREADY HAVE AN ACCOUNT"
+    "switchToLogin": "← ALREADY HAVE AN ACCOUNT",
+    "brandTagline": "Spot it. Report it. Clean it.",
+    "brandBullets": {
+      "report": "Report litter and dumping across Sofia in seconds",
+      "earn": "Earn points, badges and streaks for every cleanup",
+      "compete": "Climb the city leaderboard with your district"
+    }
   },
   "Nav": {
     "reports": "REPORTS",

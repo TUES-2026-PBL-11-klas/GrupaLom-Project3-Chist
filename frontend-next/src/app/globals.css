@@ -281,3 +281,23 @@ button:focus:not(:focus-visible) { outline: none; }
   .anim-fade-up, .anim-fade-in, .anim-pop-in, .anim-float { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ── Auth gradient backdrop ───────────────────────────────────────────────
+   Dark base + soft pink→magenta radial glows, layered behind the auth card. */
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 18% 12%, rgba(255, 77, 148, 0.16) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 88%, rgba(192, 38, 211, 0.16) 0%, transparent 62%),
+    radial-gradient(40% 40% at 75% 18%, rgba(244, 114, 182, 0.08) 0%, transparent 60%),
+    var(--color-bg-base);
+}
+.auth-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  pointer-events: none;
+}
