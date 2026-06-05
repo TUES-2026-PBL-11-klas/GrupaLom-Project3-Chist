@@ -29,11 +29,11 @@ ingress:
 
 resources:
   requests:
-    cpu: 100m
+    cpu: 20m
     memory: 256Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 100m
+    memory: 384Mi
 
 livenessProbe:
   httpGet:
@@ -65,6 +65,10 @@ envFrom:
       name: secret-report
   - secretRef:
       name: rabbitmq-secret
+
+env:
+  - name: SERVER_PORT_REPORT
+    value: "8081"
 
 httpRoute:
   enabled: false

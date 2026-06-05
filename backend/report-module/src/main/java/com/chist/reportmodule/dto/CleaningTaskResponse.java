@@ -1,6 +1,5 @@
 package com.chist.reportmodule.dto;
 
-
 import com.chist.reportmodule.model.TaskStatus;
 import lombok.*;
 import java.util.Date;

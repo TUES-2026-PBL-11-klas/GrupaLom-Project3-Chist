@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend-chart.fullname" . }}
+  name: {{ include "frontend-chart.fullname" . }}
   labels:
-    {{- include "backend-chart.labels" . | nindent 4 }}
+    {{- include "frontend-chart.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -16,7 +16,7 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      {{- include "backend-chart.selectorLabels" . | nindent 6 }}
+      {{- include "frontend-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -24,7 +24,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "backend-chart.labels" . | nindent 8 }}
+        {{- include "frontend-chart.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -33,7 +33,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "backend-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "frontend-chart.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -48,8 +48,15 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.containerPort | default .Values.service.port }}
               protocol: TCP
+          {{- with .Values.env }}
+          env:
+            {{- range $k, $v := . }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -66,13 +73,13 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.envFrom }}
+          {{- if .Values.envFrom }}
           envFrom:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.envFrom | nindent 12 }}
           {{- end }}
-          {{- with .Values.env }}
+          {{- if .Values.env }}
           env:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
       {{- with .Values.volumes }}
       volumes:

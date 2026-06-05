@@ -74,17 +74,43 @@ services:
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
 
+  verification-module:
+    build:
+      context: ./backend/verification-module
+      dockerfile: Dockerfile
+    container_name: chist-verification
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db
+    environment:
+      SERVER_PORT_VERIFICATION: 8083
+      DB_URL: jdbc:postgresql://db:5432/appdb
+      DB_USERNAME: appuser
+      DB_PASSWORD: localpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: dev
+      COMPUTER_VISION_ENDPOINT: ${COMPUTER_VISION_ENDPOINT:-https://chist-verification.cognitiveservices.azure.com/}
+      COMPUTER_VISION_KEY: ${COMPUTER_VISION_KEY:-your-azure-key-here}
+
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend-next
       dockerfile: Dockerfile
     container_name: chist-frontend
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      BACKEND_URL: http://user-module:8080
+      AUTH_COOKIE_SECURE: "false"
+      NEXT_PUBLIC_DEFAULT_LOCALE: bg
     depends_on:
       - user-module
       - report-module
       - notification-module
+      - verification-module
 
 volumes:
   postgres_data:

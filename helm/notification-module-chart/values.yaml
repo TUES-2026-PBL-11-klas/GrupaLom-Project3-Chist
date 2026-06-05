@@ -22,7 +22,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8083
+  port: 8082
 
 ingress:
   enabled: false
@@ -38,7 +38,7 @@ resources:
 livenessProbe:
   httpGet:
     path: /actuator/health
-    port: 8083
+    port: 8082
   initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
@@ -46,7 +46,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /actuator/health
-    port: 8083
+    port: 8082
   initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
@@ -65,6 +65,10 @@ envFrom:
       name: secret-notification
   - secretRef:
       name: rabbitmq-secret
+
+env:
+  - name: SERVER_PORT_NOTIFICATION
+    value: "8082"
 
 httpRoute:
   enabled: false

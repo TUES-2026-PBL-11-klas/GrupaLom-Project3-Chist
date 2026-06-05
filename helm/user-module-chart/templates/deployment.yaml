@@ -13,7 +13,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       {{- include "backend-chart.selectorLabels" . | nindent 6 }}
@@ -66,13 +66,13 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.envFrom }}
+          {{- if .Values.envFrom }}
           envFrom:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.envFrom | nindent 12 }}
           {{- end }}
-          {{- with .Values.env }}
+          {{- if .Values.env }}
           env:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
       {{- with .Values.volumes }}
       volumes:

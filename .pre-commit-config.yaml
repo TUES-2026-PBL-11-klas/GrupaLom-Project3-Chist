@@ -29,25 +29,6 @@ repos:
             node_modules/|
           )$
 
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.56.0
-    hooks:
-      - id: eslint
-        files: ^frontend/.*\.[jt]sx?$
-        args: [--fix, --max-warnings=0]
-        additional_dependencies:
-          - eslint@8.57.0
-          - eslint-plugin-react@7.34.0
-          - eslint-plugin-react-hooks@4.6.0
-          - "@typescript-eslint/eslint-plugin@7.0.0"
-          - "@typescript-eslint/parser@7.0.0"
-        exclude: |
-          (?x)^(
-            build/|
-            dist/|
-            node_modules/
-          )$
-
   # Spring Boot
   - repo: local
     hooks:

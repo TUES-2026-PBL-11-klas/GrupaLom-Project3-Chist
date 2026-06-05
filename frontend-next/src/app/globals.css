@@ -1,0 +1,303 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@theme {
+  /* Pink / magenta accents */
+  --color-pink-primary: #FF4D94;
+  --color-magenta: #C026D3;
+  --color-pink-light: #F472B6;
+  --color-pink-glow: rgba(255, 77, 148, 0.3);
+  --color-accent-pink: #FF4D94;
+  --color-accent-pink-dim: rgba(255, 77, 148, 0.12);
+  --color-accent-pink-border: rgba(255, 77, 148, 0.35);
+  --color-accent-pink-glow: rgba(255, 77, 148, 0.4);
+
+  /* Neutrals */
+  --color-brand-primary: #ffffff;
+  --color-brand-primary-dim: rgba(255, 255, 255, 0.07);
+  --color-brand-primary-border: rgba(255, 255, 255, 0.18);
+  --color-brand-primary-glow: rgba(255, 255, 255, 0.15);
+  --color-brand-secondary: #cccccc;
+  --color-brand-secondary-dim: rgba(255, 255, 255, 0.06);
+  --color-brand-accent: #999999;
+  --color-brand-accent-dim: rgba(255, 255, 255, 0.05);
+
+  /* Status */
+  --color-status-red: #ff4444;
+  --color-status-red-dim: rgba(255, 68, 68, 0.1);
+  --color-status-green-ok: #aaaaaa;
+  --color-status-green-dim: rgba(255, 255, 255, 0.06);
+  --color-status-orange: #cccccc;
+
+  /* Backgrounds */
+  --color-bg-base: #000000;
+  --color-bg-surface: #0f0f0f;
+  --color-bg-card: rgba(255, 255, 255, 0.04);
+  --color-bg-card-hover: rgba(255, 255, 255, 0.07);
+  --color-bg-input: rgba(255, 255, 255, 0.05);
+  --color-bg-glass: rgba(255, 255, 255, 0.03);
+
+  /* Text */
+  --color-text-1: #ffffff;
+  --color-text-2: rgba(255, 255, 255, 0.55);
+  --color-text-3: rgba(255, 255, 255, 0.3);
+
+  /* Borders (prefixed to avoid clashing with shadcn --color-border) */
+  --color-brand-border: rgba(255, 255, 255, 0.08);
+  --color-brand-border-md: rgba(255, 255, 255, 0.15);
+
+  /* Fonts — fallback families behind the self-hosted next/font faces wired up in
+     layout.tsx (Nunito Sans display, Inter body, Space Mono). All ship Cyrillic
+     except Space Mono, which is latin-only by design (numeric / code accents). */
+  --font-display: "Nunito Sans", sans-serif;
+  --font-mono-brand: "Space Mono", monospace;
+  --font-body: "Inter", sans-serif;
+
+  /* Brand radii (suffixed to avoid clashing with shadcn --radius-* tokens already defined) */
+  --radius-brand-sm: 8px;
+  --radius-brand-md: 12px;
+  --radius-brand-lg: 16px;
+  --radius-brand-xl: 22px;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-1);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar / selection / focus — ported from the dev branch ───────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-brand-border-md); border-radius: 2px; }
+
+::selection { background: var(--color-brand-primary-dim); color: var(--color-text-1); }
+:focus-visible { outline: 2px solid var(--color-text-1); outline-offset: 2px; }
+button:focus:not(:focus-visible) { outline: none; }
+
+/* ── Display headings ──────────────────────────────────────────────────────
+   The display face is now Nunito Sans (Cyrillic-capable). Unlike Bebas Neue it
+   isn't intrinsically condensed all-caps, so the display look (heavy + caps +
+   wide tracking) is applied here, matching the dev branch's heading treatment. */
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1.05;
+}
+
+/* ── Ambient background orbs — dev branch parity ──────────────────────────── */
+.ambient-orb-tl {
+  position: fixed;
+  top: -300px;
+  left: -200px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.ambient-orb-br {
+  position: fixed;
+  bottom: -250px;
+  right: -180px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.015) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Entrance animations + stagger — ported from the dev branch ───────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.88) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.anim-fade-up { animation: fadeInUp 0.3s ease both; }
+.anim-fade-in { animation: fadeIn 0.25s ease both; }
+.anim-pop-in { animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.anim-float { animation: floatY 2.5s ease-in-out infinite; }
+
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up, .anim-fade-in, .anim-pop-in, .anim-float { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ── Auth gradient backdrop ───────────────────────────────────────────────
+   Dark base + soft pink→magenta radial glows, layered behind the auth card. */
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 18% 12%, rgba(255, 77, 148, 0.16) 0%, transparent 60%),
+    radial-gradient(55% 55% at 85% 88%, rgba(192, 38, 211, 0.16) 0%, transparent 62%),
+    radial-gradient(40% 40% at 75% 18%, rgba(244, 114, 182, 0.08) 0%, transparent 60%),
+    var(--color-bg-base);
+}
+.auth-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  pointer-events: none;
+}

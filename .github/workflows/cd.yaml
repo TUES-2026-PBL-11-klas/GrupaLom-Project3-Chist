@@ -36,7 +36,7 @@ jobs:
             verification:
               - 'backend/verification-module/**'
             frontend:
-              - 'frontend/**'
+              - 'frontend-next/**'
 
   build-user:
     name: Build & Push user-module
@@ -249,12 +249,12 @@ jobs:
 
       - uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./frontend-next
+          file: ./frontend-next/Dockerfile
           push: true
           tags: |
-            ${{ steps.acr.outputs.registry }}/chist-frontend:latest
-            ${{ steps.acr.outputs.registry }}/chist-frontend:${{ steps.tags.outputs.sha_tag }}
+            ${{ steps.acr.outputs.registry }}/chist-frontend-next:latest
+            ${{ steps.acr.outputs.registry }}/chist-frontend-next:${{ steps.tags.outputs.sha_tag }}
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
 
