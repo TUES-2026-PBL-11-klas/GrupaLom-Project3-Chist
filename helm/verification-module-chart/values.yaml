@@ -22,7 +22,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8082
+  port: 8083
 
 ingress:
   enabled: false
@@ -38,7 +38,7 @@ resources:
 livenessProbe:
   httpGet:
     path: /actuator/health
-    port: 8082
+    port: 8083
   initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
@@ -46,7 +46,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /actuator/health
-    port: 8082
+    port: 8083
   initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
