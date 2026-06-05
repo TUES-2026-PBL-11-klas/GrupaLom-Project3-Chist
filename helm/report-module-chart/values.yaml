@@ -69,6 +69,8 @@ envFrom:
 env:
   - name: SERVER_PORT_REPORT
     value: "8081"
+  - name: APP_UPLOAD_DIR
+    value: "/tmp/uploads"
 
 httpRoute:
   enabled: false
