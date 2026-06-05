@@ -86,15 +86,17 @@ ti "module.kubernetes.helm_release.argocd"        "argocd/argocd"
 ti "module.kubernetes.helm_release.argocd_apps"   "argocd/argocd-apps"
 
 # ── Kubernetes namespaces ─────────────────────────────────────────────
-ti "module.kubernetes.kubernetes_namespace.db"    "db"
-ti "module.kubernetes.kubernetes_namespace.chist" "chist"
+ti "module.kubernetes.kubernetes_namespace.db"       "db"
+ti "module.kubernetes.kubernetes_namespace.chist"   "chist"
+ti "module.kubernetes.kubernetes_namespace.rabbitmq" "rabbitmq"
 
 # ── Kubernetes secrets ────────────────────────────────────────────────
 # Import existing secrets so Terraform can update them in-place.
 # If a secret does not exist yet (import fails with "not found"), that is
 # fine — Terraform will create it fresh on the next apply.
 ti "module.kubernetes.kubernetes_secret.cnpg_app_credentials" "db/cnpg-app-credentials"
-ti "module.kubernetes.kubernetes_secret.rabbitmq_secret"      "chist/rabbitmq-secret"
+ti "module.kubernetes.kubernetes_secret.rabbitmq_password_secret" "rabbitmq/rabbitmq-secret"
+ti "module.kubernetes.kubernetes_secret.rabbitmq_secret"          "chist/rabbitmq-secret"
 ti "module.kubernetes.kubernetes_secret.secret_user"          "chist/secret-user"
 ti "module.kubernetes.kubernetes_secret.secret_report"        "chist/secret-report"
 ti "module.kubernetes.kubernetes_secret.secret_verification"  "chist/secret-verification"

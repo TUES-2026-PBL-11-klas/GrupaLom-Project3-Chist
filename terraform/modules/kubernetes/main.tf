@@ -31,23 +31,6 @@ resource "helm_release" "cnpg_operator" {
   wait             = true
   timeout          = 300
 }
-# ── RabbitMQ namespace (owned by Terraform; chart owned by ArgoCD) ───
-resource "kubernetes_namespace" "rabbitmq" {
-  metadata { name = "rabbitmq" }
-}
-
-# Password secret used by the ArgoCD-managed RabbitMQ chart (existingPasswordSecret).
-# Must live in the rabbitmq namespace alongside the pod.
-resource "kubernetes_secret" "rabbitmq_auth_secret" {
-  metadata {
-    name      = "rabbitmq-secret"
-    namespace = kubernetes_namespace.rabbitmq.metadata[0].name
-  }
-  data = {
-    RABBITMQ_PASSWORD = var.rabbitmq_password
-  }
-}
-
 # ── ArgoCD ───────────────────────────────────────────────────
 resource "helm_release" "argocd" {
   name             = "argocd"
