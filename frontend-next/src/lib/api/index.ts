@@ -40,6 +40,7 @@ export const usersApi = {
   updateMe: (p: Record<string, unknown>) =>
     serverFetch("/users/me", { method: "PATCH", body: JSON.stringify(p) }),
   getById: (id: string) => serverFetch(`/users/${id}`),
+  getPublicById: (id: string) => serverFetch(`/users/internal/${id}`),
   getBadges: () => serverFetch("/users/me/badges"),
   getActivity: (page = 0) =>
     serverFetch(`/users/me/activity?page=${page}&size=20`),
