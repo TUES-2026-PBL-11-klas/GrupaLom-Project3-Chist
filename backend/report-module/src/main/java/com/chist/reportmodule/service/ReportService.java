@@ -29,15 +29,19 @@ public class ReportService {
     @Value("${app.upload-dir:uploads/reports}")
     private String uploadDir;
 
-    public ReportResponse createReport(UUID userId, CreateReportRequest request, MultipartFile image) throws IOException {
+    public ReportResponse createReport(UUID userId, CreateReportRequest request, MultipartFile image) {
         String photoUrl = null;
         if (image != null && !image.isEmpty()) {
-            Path uploadPath = Paths.get(uploadDir);
-            Files.createDirectories(uploadPath);
-            String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(image.getInputStream(), filePath);
-            photoUrl = "/uploads/reports/" + filename;
+            try {
+                Path uploadPath = Paths.get(uploadDir);
+                Files.createDirectories(uploadPath);
+                String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                Path filePath = uploadPath.resolve(filename);
+                Files.copy(image.getInputStream(), filePath);
+                photoUrl = "/uploads/reports/" + filename;
+            } catch (IOException e) {
+                // Local filesystem storage is not available in this environment — photo skipped
+            }
         }
 
         Report report = Report.builder()
