@@ -31,44 +31,6 @@ resource "helm_release" "cnpg_operator" {
   wait             = true
   timeout          = 300
 }
-# ── RabbitMQ ─────────────────────────────────────────────────
-resource "helm_release" "rabbitmq" {
-  name             = "rabbitmq"
-  repository       = "oci://registry-1.docker.io/bitnamicharts"
-  chart            = "rabbitmq"
-  version          = "16.0.14"
-  namespace        = "rabbitmq"
-  create_namespace = true
-  wait             = true
-  timeout          = 600
-
-  values = [yamlencode({
-    global = {
-      imageRegistry = "acrchistdev.azurecr.io"
-      security = {
-        allowInsecureImages = true
-      }
-    }
-    auth = {
-      username = "chist"
-      password = var.rabbitmq_password
-    }
-    persistence = {
-      enabled = true
-      size    = "1Gi"
-    }
-    resources = {
-      requests = { cpu = "100m", memory = "256Mi" }
-      limits   = { cpu = "500m", memory = "512Mi" }
-    }
-    service = {
-      type = "ClusterIP"
-    }
-  })]
-
-  depends_on = [helm_release.nginx_ingress]
-}
-
 # ── ArgoCD ───────────────────────────────────────────────────
 resource "helm_release" "argocd" {
   name             = "argocd"
@@ -122,6 +84,24 @@ resource "kubernetes_namespace" "chist" {
   metadata { name = "chist" }
 }
 
+resource "kubernetes_namespace" "rabbitmq" {
+  metadata { name = "rabbitmq" }
+}
+
+# ── RabbitMQ password secret for ArgoCD-managed RabbitMQ ─────
+# ArgoCD rabbitmq.yaml uses existingPasswordSecret: rabbitmq-secret
+# in the rabbitmq namespace. This secret provides that password.
+resource "kubernetes_secret" "rabbitmq_password_secret" {
+  metadata {
+    name      = "rabbitmq-secret"
+    namespace = kubernetes_namespace.rabbitmq.metadata[0].name
+  }
+  data = {
+    RABBITMQ_PASSWORD = var.rabbitmq_password
+  }
+  depends_on = [kubernetes_namespace.rabbitmq]
+}
+
 # ── CNPG bootstrap credentials secret ───────────────────────
 # Used by cluster.yaml to create the superuser on first init.
 # One secret covers all four databases – CNPG creates each DB
@@ -139,16 +119,18 @@ resource "kubernetes_secret" "cnpg_app_credentials" {
 }
 
 # ── RabbitMQ connection secret (consumed by all services) ────
+# Keys use the SPRING_RABBITMQ_* prefix so Spring Boot relaxed binding
+# maps them to spring.rabbitmq.* without explicit application.yaml entries.
 resource "kubernetes_secret" "rabbitmq_secret" {
   metadata {
     name      = "rabbitmq-secret"
     namespace = kubernetes_namespace.chist.metadata[0].name
   }
   data = {
-    RABBITMQ_HOST     = "rabbitmq.rabbitmq.svc.cluster.local"
-    RABBITMQ_PORT     = "5672"
-    RABBITMQ_USER     = "chist"
-    RABBITMQ_PASSWORD = var.rabbitmq_password
+    SPRING_RABBITMQ_HOST     = "rabbitmq.rabbitmq.svc.cluster.local"
+    SPRING_RABBITMQ_PORT     = "5672"
+    SPRING_RABBITMQ_USERNAME = "chist"
+    SPRING_RABBITMQ_PASSWORD = var.rabbitmq_password
   }
 }
 
@@ -177,7 +159,8 @@ resource "kubernetes_secret" "secret_user" {
     COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
     COMPUTER_VISION_KEY      = var.computer_vision_key
 
-    AZURE_KEY_VAULT_NAME = var.key_vault_name
+    APP_CORS_ALLOWED_ORIGINS = var.cors_allowed_origins
+    AZURE_KEY_VAULT_NAME     = var.key_vault_name
   }
 }
 
@@ -198,7 +181,8 @@ resource "kubernetes_secret" "secret_report" {
     COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
     COMPUTER_VISION_KEY      = var.computer_vision_key
 
-    AZURE_KEY_VAULT_NAME = var.key_vault_name
+    APP_CORS_ALLOWED_ORIGINS = var.cors_allowed_origins
+    AZURE_KEY_VAULT_NAME     = var.key_vault_name
   }
 }
 

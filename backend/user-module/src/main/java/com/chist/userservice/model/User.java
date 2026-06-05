@@ -35,16 +35,16 @@ public class User implements UserDetails {
     @Column(nullable = false,unique = true,length = 100)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "password_hash")
     private String password;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String username;
 
     @Column(nullable = false)
     private int points = 0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "streak_days")
     private int streak = 0;
 
     @CreatedDate
