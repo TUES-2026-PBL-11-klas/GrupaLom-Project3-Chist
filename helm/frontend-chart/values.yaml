@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-frontend-next
   pullPolicy: Always
-  tag: '062a7d1'
+  tag: 'b6c36d5'
 containerPort: 3000
 env:
   NODE_ENV: "production"
