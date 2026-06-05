@@ -25,7 +25,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-brand-border bg-bg-base/80 backdrop-blur">
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <nav className="flex h-16 items-center justify-between gap-6 px-6 lg:px-10">
         <Link href={`/${locale}/reports`} className="flex items-center gap-2">
           <span className="rounded-full bg-accent-pink-dim border border-accent-pink-border p-1.5 text-accent-pink">
             <Leaf size={16} strokeWidth={1.8} />
@@ -36,14 +36,14 @@ export function Navbar() {
           </span>
         </Link>
 
-        <ul className="hidden md:flex items-center gap-1">
+        <ul className="hidden md:flex flex-1 items-center justify-center gap-2 lg:gap-4">
           {links.map((l) => {
             const active = pathname?.startsWith(l.href);
             return (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className={`px-3 py-1.5 rounded-md text-xs uppercase tracking-wider transition ${
+                  className={`px-4 py-2 rounded-md text-xs uppercase tracking-wider transition ${
                     active
                       ? "text-accent-pink bg-accent-pink-dim"
                       : "text-text-2 hover:text-text-1 hover:bg-brand-primary-dim"
