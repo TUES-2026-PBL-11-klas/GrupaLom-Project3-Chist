@@ -2,7 +2,9 @@ package com.chist.reportmodule.service;
 
 import com.chist.reportmodule.dto.CleaningTaskResponse;
 import com.chist.reportmodule.dto.CreateCleaningTaskRequest;
+import com.chist.reportmodule.event.TaskCompletedEvent;
 import com.chist.reportmodule.exception.ReportOrTaskNotFoundException;
+import com.chist.reportmodule.messaging.ReportEventPublisher;
 import com.chist.reportmodule.model.CleaningTask;
 import com.chist.reportmodule.model.Report;
 import com.chist.reportmodule.model.ReportStatus;
@@ -22,6 +24,7 @@ public class CleaningTaskService {
 
     private final CleaningTaskRepository cleaningTaskRepository;
     private final ReportRepository reportRepository;
+    private final ReportEventPublisher eventPublisher;
 
     public CleaningTaskResponse createCleaningTask(UUID cleanerId, CreateCleaningTaskRequest request){
         Report report = reportRepository.findById(request.getReportId())
@@ -51,7 +54,7 @@ public class CleaningTaskService {
                 .collect(Collectors.toList());
     }
 
-    public CleaningTaskResponse uploadPhotos(UUID cleaningTaskId,String beforePhoto,String afterPhoto){
+    public CleaningTaskResponse uploadPhotos(UUID cleaningTaskId, String beforePhoto, String afterPhoto){
         CleaningTask cleaningTask = cleaningTaskRepository.findById(cleaningTaskId)
                 .orElseThrow(() -> new ReportOrTaskNotFoundException("Task Not Found."));
         cleaningTask.setBeforePhoto(beforePhoto);
@@ -64,9 +67,22 @@ public class CleaningTaskService {
         CleaningTask cleaningTask = cleaningTaskRepository.findById(cleaningTaskId)
                 .orElseThrow(() -> new ReportOrTaskNotFoundException("Task Not Found."));
         cleaningTask.setStatus(TaskStatus.COMPLETED);
-        cleaningTask.getReport().setStatus(ReportStatus.CLEANED);
-        reportRepository.save(cleaningTask.getReport());
-        return mapToDTO(cleaningTaskRepository.save(cleaningTask));
+        Report report = cleaningTask.getReport();
+        report.setStatus(ReportStatus.CLEANED);
+        reportRepository.save(report);
+        CleaningTask saved = cleaningTaskRepository.save(cleaningTask);
+
+        eventPublisher.publishTaskCompleted(TaskCompletedEvent.builder()
+                .taskId(saved.getId())
+                .reportId(report.getId())
+                .cleanerId(saved.getCleanerId())
+                .beforePhotoUrl(saved.getBeforePhoto())
+                .afterPhotoUrl(saved.getAfterPhoto())
+                .latitude(report.getLatitude())
+                .longitude(report.getLongitude())
+                .build());
+
+        return mapToDTO(saved);
     }
 
     private CleaningTaskResponse mapToDTO(CleaningTask cleaningTask){
@@ -82,6 +98,4 @@ public class CleaningTaskService {
                 .updatedAt(cleaningTask.getUpdatedAt())
                 .build();
     }
-
-
 }

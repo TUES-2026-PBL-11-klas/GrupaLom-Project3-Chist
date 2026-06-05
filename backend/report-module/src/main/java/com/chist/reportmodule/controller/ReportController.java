@@ -69,8 +69,9 @@ public class ReportController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<ReportResponse> updateStatus(
             @PathVariable UUID id,
-            @RequestParam ReportStatus status) {
-        return ResponseEntity.ok(reportService.updateStatus(id, status));
+            @RequestParam ReportStatus status,
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId) {
+        return ResponseEntity.ok(reportService.updateStatus(id, status, userId));
     }
 
     @GetMapping("/{id}/image")
