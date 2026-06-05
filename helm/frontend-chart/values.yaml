@@ -38,7 +38,7 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   hosts:
-    - host: "20.240.6.13.nip.io"
+    - host: "4.165.174.62.nip.io"
       paths:
         - path: /
           pathType: Prefix
