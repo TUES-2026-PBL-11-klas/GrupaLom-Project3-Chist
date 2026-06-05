@@ -13,13 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Mono;
-
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,39 +58,26 @@ class VerificationServiceTest {
     }
 
     @Test
-    void verify_bothPass_returnsApproved() {
-        when(gpsVerificationService.verify(any(), any(), any(), any())).thenReturn(true);
-        when(aiVerificationService.verifyCleanFromBytes(any(), any())).thenReturn(Mono.just(true));
-        when(verificationRepository.save(any())).thenReturn(verification);
+    void verify_gpsPass_photoFetchFails_returnsPending() {
+        when(gpsVerificationService.verify(anyDouble(), anyDouble(), anyDouble(), anyDouble())).thenReturn(true);
+        when(verificationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         VerificationResponse response = verificationService.verify(request);
 
         assertNotNull(response);
-        assertEquals(VerificationStatus.APPROVED, response.getStatus());
+        assertEquals(VerificationStatus.PENDING, response.getStatus());
+        assertEquals("Partial verification - waiting for admin approval", response.getResult());
     }
 
     @Test
     void verify_bothFail_returnsRejected() {
-        when(gpsVerificationService.verify(any(), any(), any(), any())).thenReturn(false);
-        when(aiVerificationService.verifyCleanFromBytes(any(), any())).thenReturn(Mono.just(false));
-        verification.setStatus(VerificationStatus.REJECTED);
-        when(verificationRepository.save(any())).thenReturn(verification);
+        when(gpsVerificationService.verify(anyDouble(), anyDouble(), anyDouble(), anyDouble())).thenReturn(false);
+        when(verificationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         VerificationResponse response = verificationService.verify(request);
 
         assertEquals(VerificationStatus.REJECTED, response.getStatus());
-    }
-
-    @Test
-    void verify_onePass_returnsPending() {
-        when(gpsVerificationService.verify(any(), any(), any(), any())).thenReturn(true);
-        when(aiVerificationService.verifyCleanFromBytes(any(), any())).thenReturn(Mono.just(false));
-        verification.setStatus(VerificationStatus.PENDING);
-        when(verificationRepository.save(any())).thenReturn(verification);
-
-        VerificationResponse response = verificationService.verify(request);
-
-        assertEquals(VerificationStatus.PENDING, response.getStatus());
+        assertEquals("Both GPS and AI verification failed", response.getResult());
     }
 
     @Test
@@ -110,5 +96,48 @@ class VerificationServiceTest {
 
         assertThrows(VerificationNotFoundException.class,
                 () -> verificationService.adminApprove(testId));
+    }
+
+    @Test
+    void verify_gpsFail_photoFetchFails_returnsRejected() {
+        when(gpsVerificationService.verify(anyDouble(), anyDouble(), anyDouble(), anyDouble())).thenReturn(false);
+        when(verificationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        VerificationResponse response = verificationService.verify(request);
+
+        assertEquals(VerificationStatus.REJECTED, response.getStatus());
+    }
+
+    @Test
+    void adminReject_success() {
+        when(verificationRepository.findById(testId)).thenReturn(Optional.of(verification));
+        verification.setStatus(VerificationStatus.REJECTED);
+        when(verificationRepository.save(any())).thenReturn(verification);
+
+        VerificationResponse response = verificationService.adminReject(testId);
+
+        assertEquals(VerificationStatus.REJECTED, response.getStatus());
+        assertEquals("Rejected by admin", response.getResult());
+    }
+
+    @Test
+    void adminReject_notFound_throwsException() {
+        when(verificationRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(VerificationNotFoundException.class,
+                () -> verificationService.adminReject(testId));
+    }
+
+    @Test
+    void getById_success() {
+        when(verificationRepository.findById(testId)).thenReturn(Optional.of(verification));
+        VerificationResponse response = verificationService.getById(testId);
+        assertEquals(testId, response.getTaskId());
+    }
+
+    @Test
+    void getById_notFound_throwsException() {
+        when(verificationRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(VerificationNotFoundException.class,
+                () -> verificationService.getById(testId));
     }
 }

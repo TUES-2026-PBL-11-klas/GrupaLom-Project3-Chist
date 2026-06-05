@@ -117,4 +117,31 @@ class ReportServiceTest {
 
         assertThrows(ReportOrTaskNotFoundException.class, () -> reportService.deleteReport(testId));
     }
+
+    @Test
+    void getReportsByStatus_success() {
+        when(reportRepository.findByStatus(ReportStatus.NEW)).thenReturn(List.of(testReport));
+        List<ReportResponse> result = reportService.getReportsByStatus(ReportStatus.NEW);
+        assertEquals(1, result.size());
+        assertEquals(ReportStatus.NEW, result.get(0).getStatus());
+    }
+
+    @Test
+    void getReportsByUser_emptyList() {
+        when(reportRepository.findByUserId(testUserId)).thenReturn(List.of());
+        assertTrue(reportService.getReportsByUserId(testUserId).isEmpty());
+    }
+
+    @Test
+    void updateStatus_notFound_throwsException() {
+        when(reportRepository.findById(testId)).thenReturn(Optional.empty());
+        assertThrows(ReportOrTaskNotFoundException.class,
+                () -> reportService.updateStatus(testId, ReportStatus.CLEANED));
+    }
+
+    @Test
+    void getAllReports_success() {
+        when(reportRepository.findAll()).thenReturn(List.of(testReport));
+        assertEquals(1, reportService.getAllReports().size());
+    }
 }
