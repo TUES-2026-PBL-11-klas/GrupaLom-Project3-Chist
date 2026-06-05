@@ -1,0 +1,207 @@
+{
+  "Home": {
+    "title": "CHIST",
+    "subtitle": "Sofia · Cleaner City"
+  },
+  "Auth": {
+    "tabs": { "login": "ВХОД", "register": "РЕГИСТРАЦИЯ" },
+    "email": "Имейл",
+    "emailPlaceholder": "you@example.com",
+    "password": "Парола",
+    "passwordPlaceholder": "••••••••",
+    "username": "Потребителско име",
+    "usernamePlaceholder": "GreenWarrior99",
+    "confirmPassword": "Потвърди парола",
+    "minPasswordHint": "минимум 8 символа",
+    "submitLogin": "ВХОД",
+    "submitRegister": "СЪЗДАЙ АКАУНТ",
+    "submitting": "Изпращане...",
+    "errorRequired": "Попълнете всички полета.",
+    "errorMismatch": "Паролите не съвпадат.",
+    "errorMinLength": "Паролата трябва да е минимум 8 символа.",
+    "errorGeneric": "Възникна грешка. Опитайте отново.",
+    "switchToRegister": "Нямате акаунт? РЕГИСТРАЦИЯ →",
+    "switchToLogin": "← ВЕЧЕ ИМАМ АКАУНТ",
+    "brandTagline": "Забележи. Сигнализирай. Почисти.",
+    "brandBullets": {
+      "report": "Сигнализирай за боклук и нерегламентирани сметища в София за секунди",
+      "earn": "Печели точки, значки и серии за всяко почистване",
+      "compete": "Изкачи се в градската класация заедно с твоя район"
+    }
+  },
+  "Nav": {
+    "reports": "СИГНАЛИ",
+    "leaderboard": "КЛАСАЦИЯ",
+    "profile": "ПРОФИЛ",
+    "rewards": "НАГРАДИ",
+    "newReport": "НОВ СИГНАЛ",
+    "logout": "ИЗХОД"
+  },
+  "LocaleSwitcher": {
+    "label": "Език",
+    "bg": "Български",
+    "en": "Английски"
+  },
+  "Severity": {
+    "critical": "КРИТИЧНО",
+    "high": "СЕРИОЗНО",
+    "medium": "СРЕДНО",
+    "low": "ЛЕКО"
+  },
+  "Status": {
+    "open": "ОТВОРЕН",
+    "inProgress": "В ПРОЦЕС",
+    "done": "ЗАТВОРЕН"
+  },
+  "Reports": {
+    "signalsCount": "{n} сигнала",
+    "noMatch": "Няма сигнали отговарящи на филтрите.",
+    "loadingMap": "Зареждане на картата…",
+    "streakDays": "{n}-дневна серия",
+    "streakLabel": "Серия",
+    "signalsLabel": "Сигнали"
+  },
+  "ReportDetail": {
+    "back": "обратно към сигналите",
+    "claim": "Поеми",
+    "markComplete": "Маркирай готово",
+    "confirmSighting": "Потвърди наблюдение",
+    "unknownReporter": "—",
+    "openLink": "ОТВОРИ →"
+  },
+  "Levels": {
+    "novice": "НОВИЧ",
+    "active": "АКТИВЕН",
+    "pro": "ПРО",
+    "master": "МАСТЪР",
+    "legend": "ЛЕГЕНДА"
+  },
+  "Rewards": {
+    "title": "НАГРАДИ",
+    "hero": {
+      "balanceLabel": "НАЛИЧНИ ТОЧКИ",
+      "chistPoints": "CHIST POINTS",
+      "cleanings": "ПОЧИСТВАНИЯ",
+      "reports": "СИГНАЛИ",
+      "streak": "СТРИЙК"
+    },
+    "tabs": {
+      "shop": "МАГАЗИН",
+      "history": "ИСТОРИЯ"
+    },
+    "categories": {
+      "all": "ВСИЧКИ",
+      "food": "ХРАНА",
+      "eco": "ЕКО",
+      "transport": "ТРАНСПОРТ",
+      "experience": "ПРЕЖИВЯВАНЕ",
+      "status": "СТАТУС"
+    },
+    "card": {
+      "taken": "ВЗЕТО",
+      "moreNeeded": "Още {n} точки",
+      "hot": "HOT",
+      "new": "NEW"
+    },
+    "claim": {
+      "confirmTitle": "Потвърди награда",
+      "partner": "Партньор: {name}",
+      "points": "{n} точки",
+      "cancel": "Отказ",
+      "confirm": "Вземи",
+      "success": "{name} — взето успешно!"
+    },
+    "history": {
+      "empty": "Няма история"
+    }
+  },
+  "RewardCatalog": {
+    "1": { "name": "Безплатно кафе",        "desc": "Една безплатна напитка в партньорски кафенета в София.",   "partner": "COSTA COFFEE · STARBUCKS" },
+    "2": { "name": "Засади дърво",          "desc": "Организираме засаждане на дърво в твое име в парк в София.", "partner": "SOFIA GREEN INITIATIVE" },
+    "3": { "name": "Безплатен транспорт",   "desc": "Карта за градски транспорт за 1 месец.",                    "partner": "ЦЕНТЪРА ЗА ГРАДСКА МОБИЛНОСТ" },
+    "4": { "name": "Отстъпка 20% храна",    "desc": "20% намаление в партньорски ресторанти.",                   "partner": "HAPPY · HAPPY BAR & GRILL" },
+    "5": { "name": "Еко продуктов пакет",   "desc": "Комплект от биоразградими продукти от SofiaEco.",           "partner": "SOFIAECO STORE" },
+    "6": { "name": "Verified User статус",  "desc": "Получи официалния VRF badge и 2x точки за всяка задача.",   "partner": "CHIST PLATFORM" },
+    "7": { "name": "Концерт / Събитие",     "desc": "2 безплатни билета за партньорско събитие в София.",        "partner": "SOFIA LIVE" },
+    "8": { "name": "Почистващ комплект",    "desc": "Професионален еко комплект за почистване.",                 "partner": "ECO TOOLS BG" }
+  },
+  "Badges": {
+    "unlocked": "{earned} / {total} ОТКЛЮЧЕНИ",
+    "first_report":  { "name": "Първи сигнал",     "desc": "Докладва първото замърсяване" },
+    "first_clean":   { "name": "Първо почистване", "desc": "Почисти първото замърсяване" },
+    "streak_7":      { "name": "7-дневен стрийк",  "desc": "Активен 7 последователни дни" },
+    "clean_10":      { "name": "10 почиствания",   "desc": "Завърши 10 успешни почиствания" },
+    "verified":      { "name": "Verified User",    "desc": "Доказана активност и надеждност" },
+    "eco_legend":    { "name": "Еко легенда",      "desc": "Достигни 5000 точки" },
+    "district_hero": { "name": "Герой на района",  "desc": "Почисти 5 места в един район" },
+    "team_player":   { "name": "Екипен играч",     "desc": "Потвърди 20 задачи на другите" }
+  },
+  "Profile": {
+    "verified": "VERIFIED",
+    "xpToNext": "Към следващо ниво",
+    "tabs": {
+      "stats": "СТАТИСТИКИ",
+      "badges": "БЕЙДЖОВЕ",
+      "activity": "АКТИВНОСТ",
+      "settings": "НАСТРОЙКИ"
+    },
+    "stats": {
+      "points": "ТОЧКИ",
+      "cleanings": "ПОЧИСТВАНИЯ",
+      "reports": "СИГНАЛИ",
+      "totalPoints": "ОБЩО ТОЧКИ",
+      "streakRecord": "РЕКОРД НА СТРИЙК",
+      "streakDays": "{n} дни"
+    },
+    "activity": {
+      "last4weeks": "Последни 4 седмици",
+      "days": { "mon": "П", "tue": "В", "wed": "С", "thu": "Ч", "fri": "П", "sat": "С", "sun": "Н" }
+    },
+    "settings": {
+      "pushNotifs": "Push уведомления",
+      "pushNotifsDesc": "Известия в браузъра при нови сигнали",
+      "gps": "GPS",
+      "gpsDesc": "Локация при подаване на сигнал",
+      "emails": "Имейли",
+      "emailsDesc": "Седмично резюме",
+      "logout": "ИЗХОД"
+    }
+  },
+  "Leaderboard": {
+    "title": "КЛАСАЦИЯ",
+    "yourPosition": "ТВОЯТА ПОЗИЦИЯ",
+    "you": "ТИ",
+    "tabs": {
+      "awards": "НАГРАДИ",
+      "cleanings": "ПОЧИСТВАНИЯ",
+      "points": "ТОЧКИ"
+    },
+    "labels": {
+      "awards": "НАГРАДИ",
+      "cleanings": "ПОЧИСТВАНИЯ",
+      "points": "ТОЧКИ"
+    }
+  },
+  "NewReport": {
+    "title": "НОВ СИГНАЛ",
+    "back": "обратно",
+    "description": "Описание",
+    "descriptionPlaceholder": "Какво видяхте?",
+    "latitude": "Ширина",
+    "longitude": "Дължина",
+    "severity": "Сериозност",
+    "severityCritical": "Критично",
+    "severityHigh": "Сериозно",
+    "severityMedium": "Средно",
+    "severityLow": "Леко",
+    "photo": "Снимка (по избор)",
+    "submit": "Изпрати сигнал",
+    "submitting": "Изпращане...",
+    "failure": "Изпращането се провали",
+    "pickLocation": "Локация",
+    "pickLocationHint": "Кликнете върху картата, за да поставите карфица",
+    "useMyLocation": "Използвай моята локация",
+    "locating": "Локализиране…",
+    "locationError": "Локацията не може да бъде определена"
+  }
+}
