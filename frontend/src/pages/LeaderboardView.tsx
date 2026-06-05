@@ -8,6 +8,7 @@ import { usersApi } from "../services/api.ts";
 import { t, translateLevel } from "../i18n.ts";
 import type { Lang } from "../i18n.ts";
 
+
 const RANK_COLORS = ["#ffffff", "#aaaaaa", "#777777"];
 
 const LEVEL_THRESHOLDS = [
