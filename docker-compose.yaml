@@ -12,6 +12,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: chist-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   mailhog:
     image: mailhog/mailhog:latest
     container_name: chist-mailhog
@@ -26,6 +41,9 @@ services:
     container_name: chist-user
     ports:
       - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     environment:
       SERVER_PORT_USER: 8080
       DB_URL: jdbc:postgresql://db:5432/appdb
@@ -35,6 +53,10 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       JWT_SECRET: local-dev-secret-key-minimum-32-chars-long
       JWT_EXPIRATION: 86400000
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
 
   report-module:
     build:
@@ -43,6 +65,9 @@ services:
     container_name: chist-report
     ports:
       - "8081:8081"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     environment:
       SERVER_PORT_REPORT: 8081
       DB_URL: jdbc:postgresql://db:5432/appdb
@@ -52,6 +77,10 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       USER_SERVICE_URL: http://user-module:8080
       APP_UPLOAD_DIR: /app/uploads
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
     volumes:
       - report_uploads:/app/uploads
 
@@ -62,6 +91,9 @@ services:
     container_name: chist-notification
     ports:
       - "8082:8082"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     environment:
       SERVER_PORT_NOTIFICATION: 8082
       DB_URL: jdbc:postgresql://db:5432/appdb
@@ -76,6 +108,10 @@ services:
       SPRING_MAIL_PASSWORD: unused
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
 
   verification-module:
     build:
@@ -85,7 +121,10 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      - db
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     environment:
       SERVER_PORT_VERIFICATION: 8083
       DB_URL: jdbc:postgresql://db:5432/appdb
@@ -95,6 +134,10 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       COMPUTER_VISION_ENDPOINT: ${COMPUTER_VISION_ENDPOINT:-https://chist-verification.cognitiveservices.azure.com/}
       COMPUTER_VISION_KEY: ${COMPUTER_VISION_KEY:-your-azure-key-here}
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
 
   frontend:
     build:
@@ -106,7 +149,6 @@ services:
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
-      # Per-module backend bases; serverFetch routes by path prefix.
       USER_API_URL: http://user-module:8080/api
       REPORT_API_URL: http://report-module:8081/api
       NOTIFICATION_API_URL: http://notification-module:8082/api

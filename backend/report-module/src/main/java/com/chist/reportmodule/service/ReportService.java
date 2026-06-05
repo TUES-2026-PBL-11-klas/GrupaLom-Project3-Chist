@@ -8,8 +8,10 @@ import com.chist.reportmodule.model.Report;
 import com.chist.reportmodule.model.ReportStatus;
 import com.chist.reportmodule.repository.ReportRepository;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,14 +22,21 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReportService {
 
     private final ReportRepository reportRepository;
+    private final RestTemplate restTemplate;
 
     @Value("${app.upload-dir:uploads/reports}")
     private String uploadDir;
+
+    @Value("${user-service.url:http://localhost:8080}")
+    private String userServiceUrl;
+
+    private static final int POINTS_PER_COMPLETION = 50;
 
     public ReportResponse createReport(UUID userId, CreateReportRequest request, MultipartFile image) {
         String photoUrl = null;
@@ -40,7 +49,7 @@ public class ReportService {
                 Files.copy(image.getInputStream(), filePath);
                 photoUrl = "/uploads/reports/" + filename;
             } catch (IOException e) {
-                // Local filesystem storage is not available in this environment — photo skipped
+                log.warn("Could not save uploaded image: {}", e.getMessage());
             }
         }
 
@@ -56,7 +65,7 @@ public class ReportService {
         return mapToDTO(reportRepository.save(report));
     }
 
-    public ReportResponse getReportById(UUID  reportId){
+    public ReportResponse getReportById(UUID reportId){
         return mapToDTO(reportRepository.findById(reportId)
                 .orElseThrow(() -> new ReportOrTaskNotFoundException("Report Not Found.")));
     }
@@ -82,11 +91,17 @@ public class ReportService {
                 .collect(Collectors.toList());
     }
 
-    public ReportResponse updateStatus(UUID reportId, ReportStatus status){
+    public ReportResponse updateStatus(UUID reportId, ReportStatus status, UUID actingUserId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new ReportOrTaskNotFoundException("Report Not Found."));
         report.setStatus(status);
-        return mapToDTO(reportRepository.save(report));
+        ReportResponse saved = mapToDTO(reportRepository.save(report));
+
+        if (status == ReportStatus.CLEANED && actingUserId != null) {
+            awardPoints(actingUserId, POINTS_PER_COMPLETION);
+        }
+
+        return saved;
     }
 
     public void deleteReport(UUID reportId){
@@ -103,10 +118,19 @@ public class ReportService {
         String filename = Paths.get(report.getPhotoUrl()).getFileName().toString();
         Path base = Paths.get(uploadDir).toAbsolutePath().normalize();
         Path target = base.resolve(filename).normalize();
-        if (!target.startsWith(base)) return null; // path traversal guard
+        if (!target.startsWith(base)) return null;
         return target;
     }
 
+    private void awardPoints(UUID userId, int points) {
+        try {
+            String url = userServiceUrl + "/api/users/internal/" + userId + "/points?points=" + points;
+            restTemplate.patchForObject(url, null, Void.class);
+            log.info("Awarded {} points to user {}", points, userId);
+        } catch (Exception e) {
+            log.warn("Could not award points to user {}: {}", userId, e.getMessage());
+        }
+    }
 
     private ReportResponse mapToDTO(Report report) {
         return ReportResponse.builder()
