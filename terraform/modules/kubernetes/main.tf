@@ -122,6 +122,24 @@ resource "kubernetes_namespace" "chist" {
   metadata { name = "chist" }
 }
 
+resource "kubernetes_namespace" "rabbitmq" {
+  metadata { name = "rabbitmq" }
+}
+
+# ── RabbitMQ password secret for ArgoCD-managed RabbitMQ ─────
+# ArgoCD rabbitmq.yaml uses existingPasswordSecret: rabbitmq-secret
+# in the rabbitmq namespace. This secret provides that password.
+resource "kubernetes_secret" "rabbitmq_password_secret" {
+  metadata {
+    name      = "rabbitmq-secret"
+    namespace = kubernetes_namespace.rabbitmq.metadata[0].name
+  }
+  data = {
+    RABBITMQ_PASSWORD = var.rabbitmq_password
+  }
+  depends_on = [kubernetes_namespace.rabbitmq]
+}
+
 # ── CNPG bootstrap credentials secret ───────────────────────
 # Used by cluster.yaml to create the superuser on first init.
 # One secret covers all four databases – CNPG creates each DB

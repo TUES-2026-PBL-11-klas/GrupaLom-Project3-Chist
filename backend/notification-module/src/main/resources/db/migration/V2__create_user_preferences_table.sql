@@ -4,6 +4,5 @@ CREATE TABLE IF NOT EXISTS user_preferences (
     push_enabled BOOLEAN NOT NULL DEFAULT TRUE,
     web_enabled BOOLEAN NOT NULL DEFAULT TRUE,
     locale VARCHAR(10) NOT NULL DEFAULT 'en',
-    updated_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(uuid)
+    updated_at TIMESTAMP NOT NULL
 );

@@ -30,6 +30,7 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     baseline-version: 0
+    repair-on-migrate: true
 
 management:
   endpoints:
