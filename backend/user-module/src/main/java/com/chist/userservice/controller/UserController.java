@@ -33,6 +33,11 @@ public class UserController {
         return ResponseEntity.ok(mapToDTO(userService.getUserById(id)));
     }
 
+    @GetMapping("/internal/{id}")
+    public ResponseEntity<?> getUserByIdPublic(@PathVariable UUID id){
+        return ResponseEntity.ok(mapToDTO(userService.getUserById(id)));
+    }
+
     @GetMapping("/leaderboard")
     public ResponseEntity<List<UserResponse>> getLeaderboard(){
         int limit = 50;

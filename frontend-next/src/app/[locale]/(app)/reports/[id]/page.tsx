@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { reportsApi, usersApi, isUnauthorized } from "@/lib/api";
-import { mapApiReport, mapApiUser, type Report } from "@/lib/api/mappers";
+import { mapApiReport, type Report } from "@/lib/api/mappers";
 import { claimReport, completeReport, confirmReport } from "@/lib/actions/reports";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, Flame, User } from "lucide-react";
@@ -33,9 +33,8 @@ export default async function ReportDetail({
   let reporterName = report.reporter;
   if (!reporterName && report.userId) {
     try {
-      const rawUser = (await usersApi.getById(report.userId)) as Record<string, unknown>;
-      const user = mapApiUser(rawUser);
-      reporterName = user.name;
+      const rawUser = (await usersApi.getPublicById(report.userId)) as Record<string, unknown>;
+      reporterName = (rawUser.username as string) ?? "";
     } catch {
       // user lookup failed — leave name empty
     }
