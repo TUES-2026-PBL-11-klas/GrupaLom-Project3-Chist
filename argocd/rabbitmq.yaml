@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rabbitmq
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: rabbitmq
+    targetRevision: 14.6.6
+    helm:
+      values: |
+        image:
+          registry: public.ecr.aws
+          repository: bitnami/rabbitmq
+          tag: 3.13.7
+        auth:
+          username: chist
+          existingPasswordSecret: rabbitmq-secret
+          existingSecretPasswordKey: RABBITMQ_PASSWORD
+        persistence:
+          enabled: true
+          size: 1Gi
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        service:
+          type: ClusterIP
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rabbitmq
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

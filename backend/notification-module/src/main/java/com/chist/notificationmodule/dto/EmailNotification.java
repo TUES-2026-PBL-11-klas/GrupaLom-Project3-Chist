@@ -12,3 +12,6 @@ public class EmailNotification {
     private String subject;
     private String body;
 }
+
+
+

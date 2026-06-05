@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-user
   pullPolicy: Always
-  tag: "latest"
+  tag: '645daea'
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,11 +29,11 @@ ingress:
 
 resources:
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 20m
+    memory: 64Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 100m
+    memory: 128Mi
 
 livenessProbe:
   httpGet:
@@ -62,7 +62,13 @@ affinity: {}
 
 envFrom:
   - secretRef:
-      name: backend-secret
+      name: secret-user
+  - secretRef:
+      name: rabbitmq-secret
+
+env:
+  - name: APP_CORS_ALLOWED_ORIGINS
+    value: "http://localhost:5173,http://localhost:3000,https://20.240.6.13.nip.io"
 
 httpRoute:
   enabled: false

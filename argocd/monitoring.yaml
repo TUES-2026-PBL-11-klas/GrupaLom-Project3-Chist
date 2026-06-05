@@ -28,7 +28,7 @@ spec:
             annotations:
               nginx.ingress.kubernetes.io/ssl-redirect: "false"
             hosts:
-              - grafana.4.165.174.62.nip.io
+              - grafana.20.240.6.13.nip.io
         prometheus:
           enabled: true
         alertmanager:
@@ -45,3 +45,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+

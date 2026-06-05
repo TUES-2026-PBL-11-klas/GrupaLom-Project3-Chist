@@ -40,4 +40,18 @@ class GpsVerificationServiceTest {
 
         assertFalse(result);
     }
+
+    @Test
+    void verify_zeroDistanceWithinZeroThreshold_returnsTrue() {
+        ReflectionTestUtils.setField(gpsVerificationService, "maxDistanceMeters", 0.0);
+        boolean result = gpsVerificationService.verify(42.6977, 23.3219, 42.6977, 23.3219);
+        assertTrue(result);
+    }
+
+    @Test
+    void verify_anyOffsetWithZeroThreshold_returnsFalse() {
+        ReflectionTestUtils.setField(gpsVerificationService, "maxDistanceMeters", 0.0);
+        boolean result = gpsVerificationService.verify(42.6977, 23.3219, 42.6978, 23.3219);
+        assertFalse(result);
+    }
 }

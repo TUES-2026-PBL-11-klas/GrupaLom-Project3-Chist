@@ -29,24 +29,43 @@ variable "jwt_secret" {
 }
 
 variable "computer_vision_endpoint" {
-  type    = string
-  default = ""
+  type = string
 }
 
 variable "computer_vision_key" {
   type      = string
   sensitive = true
-  default   = ""
+}
+
+variable "mail_host" {
+  type = string
+}
+
+variable "mail_port" {
+  type = string
+}
+
+variable "mail_username" {
+  type = string
+}
+
+variable "mail_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "rabbitmq_password" {
+  description = "Password for the RabbitMQ 'chist' user"
+  type        = string
+  sensitive   = true
 }
 
 variable "kube_host" {
-  type      = string
-  sensitive = true
+  type = string
 }
 
 variable "kube_client_certificate" {
-  type      = string
-  sensitive = true
+  type = string
 }
 
 variable "kube_client_key" {
@@ -55,14 +74,10 @@ variable "kube_client_key" {
 }
 
 variable "kube_ca_certificate" {
-  type      = string
-  sensitive = true
+  type = string
 }
 
-variable "mail_host" { type = string }
-variable "mail_port" { type = string }
-variable "mail_username" { type = string }
-variable "mail_password" {
-  type      = string
-  sensitive = true
+variable "key_vault_name" {
+  description = "Name of the Azure Key Vault"
+  type        = string
 }

@@ -1,4 +1,4 @@
-# ── NGINX Ingress ────────────────────────────────────────
+# ── NGINX Ingress ────────────────────────────────────────────
 resource "helm_release" "nginx_ingress" {
   name             = "ingress-nginx"
   repository       = "https://kubernetes.github.io/ingress-nginx"
@@ -20,7 +20,7 @@ resource "helm_release" "nginx_ingress" {
   })]
 }
 
-# ── CNPG Operator ────────────────────────────────────────
+# ── CNPG Operator ────────────────────────────────────────────
 resource "helm_release" "cnpg_operator" {
   name             = "cnpg"
   repository       = "https://cloudnative-pg.github.io/charts"
@@ -28,12 +28,48 @@ resource "helm_release" "cnpg_operator" {
   version          = "0.21.6"
   namespace        = "cnpg-system"
   create_namespace = true
+  wait             = true
+  timeout          = 300
+}
+# ── RabbitMQ ─────────────────────────────────────────────────
+resource "helm_release" "rabbitmq" {
+  name             = "rabbitmq"
+  repository       = "oci://registry-1.docker.io/bitnamicharts"
+  chart            = "rabbitmq"
+  version          = "16.0.14"
+  namespace        = "rabbitmq"
+  create_namespace = true
+  wait             = true
+  timeout          = 600
 
-  wait    = true
-  timeout = 300
+  values = [yamlencode({
+    global = {
+      imageRegistry = "acrchistdev.azurecr.io"
+      security = {
+        allowInsecureImages = true
+      }
+    }
+    auth = {
+      username = "chist"
+      password = var.rabbitmq_password
+    }
+    persistence = {
+      enabled = true
+      size    = "1Gi"
+    }
+    resources = {
+      requests = { cpu = "100m", memory = "256Mi" }
+      limits   = { cpu = "500m", memory = "512Mi" }
+    }
+    service = {
+      type = "ClusterIP"
+    }
+  })]
+
+  depends_on = [helm_release.nginx_ingress]
 }
 
-# ── ArgoCD ───────────────────────────────────────────────
+# ── ArgoCD ───────────────────────────────────────────────────
 resource "helm_release" "argocd" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -51,8 +87,8 @@ resource "helm_release" "argocd" {
         hostname         = var.argocd_hostname
         servicePort      = 80
         annotations = {
-          "nginx.ingress.kubernetes.io/ssl-redirect"     = "false"
-          "nginx.ingress.kubernetes.io/backend-protocol" = "HTTP"
+          "nginx.ingress.kubernetes.io/ssl-redirect"       = "false"
+          "nginx.ingress.kubernetes.io/backend-protocol"   = "HTTP"
           "nginx.ingress.kubernetes.io/force-ssl-redirect" = "false"
         }
         tls = false
@@ -63,7 +99,7 @@ resource "helm_release" "argocd" {
   depends_on = [helm_release.nginx_ingress]
 }
 
-# ── ArgoCD Apps ──────────────────────────────────────────
+# ── ArgoCD Apps ──────────────────────────────────────────────
 resource "helm_release" "argocd_apps" {
   name             = "argocd-apps"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -77,7 +113,7 @@ resource "helm_release" "argocd_apps" {
   depends_on = [helm_release.argocd]
 }
 
-# ── Namespaces ───────────────────────────────────────────
+# ── Namespaces ───────────────────────────────────────────────
 resource "kubernetes_namespace" "db" {
   metadata { name = "db" }
 }
@@ -86,7 +122,10 @@ resource "kubernetes_namespace" "chist" {
   metadata { name = "chist" }
 }
 
-# ── CNPG App credentials secret ──────────────────────────
+# ── CNPG bootstrap credentials secret ───────────────────────
+# Used by cluster.yaml to create the superuser on first init.
+# One secret covers all four databases – CNPG creates each DB
+# with this owner.
 resource "kubernetes_secret" "cnpg_app_credentials" {
   metadata {
     name      = "cnpg-app-credentials"
@@ -99,15 +138,31 @@ resource "kubernetes_secret" "cnpg_app_credentials" {
   type = "kubernetes.io/basic-auth"
 }
 
-# ── Backend secret ───────────────────────────────────────
-resource "kubernetes_secret" "backend_secret" {
+# ── RabbitMQ connection secret (consumed by all services) ────
+resource "kubernetes_secret" "rabbitmq_secret" {
   metadata {
-    name      = "backend-secret"
+    name      = "rabbitmq-secret"
     namespace = kubernetes_namespace.chist.metadata[0].name
   }
-
   data = {
-    DB_URL      = "jdbc:postgresql://cnpg-cluster-rw.db.svc.cluster.local:5432/${var.db_name}"
+    RABBITMQ_HOST     = "rabbitmq.rabbitmq.svc.cluster.local"
+    RABBITMQ_PORT     = "5672"
+    RABBITMQ_USER     = "chist"
+    RABBITMQ_PASSWORD = var.rabbitmq_password
+  }
+}
+
+# ── Per-service backend secrets ──────────────────────────────
+# Each microservice gets its own secret with its own DB URL.
+# All share the same JWT, mail, and Computer Vision config.
+
+resource "kubernetes_secret" "secret_user" {
+  metadata {
+    name      = "secret-user"
+    namespace = kubernetes_namespace.chist.metadata[0].name
+  }
+  data = {
+    DB_URL      = "jdbc:postgresql://cnpg-cluster-rw.db.svc.cluster.local:5432/chist_users"
     DB_USERNAME = var.db_username
     DB_PASSWORD = var.db_password
 
@@ -119,12 +174,75 @@ resource "kubernetes_secret" "backend_secret" {
     MAIL_USERNAME = var.mail_username
     MAIL_PASSWORD = var.mail_password
 
-    SERVER_PORT_USER         = "8080"
-    SERVER_PORT_REPORT       = "8081"
-    SERVER_PORT_NOTIFICATION = "8082"
-
-    USER_SERVICE_URL         = "http://user-module:8080"
     COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
     COMPUTER_VISION_KEY      = var.computer_vision_key
+
+    AZURE_KEY_VAULT_NAME = var.key_vault_name
+  }
+}
+
+resource "kubernetes_secret" "secret_report" {
+  metadata {
+    name      = "secret-report"
+    namespace = kubernetes_namespace.chist.metadata[0].name
+  }
+  data = {
+    DB_URL      = "jdbc:postgresql://cnpg-cluster-rw.db.svc.cluster.local:5432/chist_reports"
+    DB_USERNAME = var.db_username
+    DB_PASSWORD = var.db_password
+
+    JWT_SECRET     = var.jwt_secret
+    JWT_EXPIRATION = "86400000"
+
+    USER_SERVICE_URL         = "http://user-module.chist.svc.cluster.local:8080"
+    COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
+    COMPUTER_VISION_KEY      = var.computer_vision_key
+
+    AZURE_KEY_VAULT_NAME = var.key_vault_name
+  }
+}
+
+resource "kubernetes_secret" "secret_verification" {
+  metadata {
+    name      = "secret-verification"
+    namespace = kubernetes_namespace.chist.metadata[0].name
+  }
+  data = {
+    DB_URL      = "jdbc:postgresql://cnpg-cluster-rw.db.svc.cluster.local:5432/chist_verification"
+    DB_USERNAME = var.db_username
+    DB_PASSWORD = var.db_password
+
+    JWT_SECRET     = var.jwt_secret
+    JWT_EXPIRATION = "86400000"
+
+    USER_SERVICE_URL         = "http://user-module.chist.svc.cluster.local:8080"
+    COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
+    COMPUTER_VISION_KEY      = var.computer_vision_key
+
+    AZURE_KEY_VAULT_NAME = var.key_vault_name
+  }
+}
+
+resource "kubernetes_secret" "secret_notification" {
+  metadata {
+    name      = "secret-notification"
+    namespace = kubernetes_namespace.chist.metadata[0].name
+  }
+  data = {
+    DB_URL      = "jdbc:postgresql://cnpg-cluster-rw.db.svc.cluster.local:5432/chist_notif"
+    DB_USERNAME = var.db_username
+    DB_PASSWORD = var.db_password
+
+    JWT_SECRET     = var.jwt_secret
+    JWT_EXPIRATION = "86400000"
+
+    MAIL_HOST     = var.mail_host
+    MAIL_PORT     = var.mail_port
+    MAIL_USERNAME = var.mail_username
+    MAIL_PASSWORD = var.mail_password
+
+    USER_SERVICE_URL = "http://user-module.chist.svc.cluster.local:8080"
+
+    AZURE_KEY_VAULT_NAME = var.key_vault_name
   }
 }

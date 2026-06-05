@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-notification
   pullPolicy: Always
-  tag: "latest"
+  tag: 'd4e4db4'
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,11 +29,11 @@ ingress:
 
 resources:
   requests:
-    cpu: 75m
-    memory: 64Mi
-  limits:
-    cpu: 300m
+    cpu: 100m
     memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
 
 livenessProbe:
   httpGet:
@@ -62,7 +62,13 @@ affinity: {}
 
 envFrom:
   - secretRef:
-      name: backend-secret
+      name: secret-notification
+  - secretRef:
+      name: rabbitmq-secret
+
+env:
+  - name: SERVER_PORT_NOTIFICATION
+    value: "8082"
 
 httpRoute:
   enabled: false

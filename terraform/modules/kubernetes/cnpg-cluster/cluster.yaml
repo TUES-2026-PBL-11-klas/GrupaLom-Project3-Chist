@@ -5,11 +5,27 @@ metadata:
   namespace: db
 spec:
   instances: 1
+
   storage:
-    size: 1Gi
+    size: 2Gi
+
+  # Bootstrap creates the superuser and the first DB.
+  # The remaining three DBs are created via initdb.postInitSQL below.
   bootstrap:
     initdb:
-      database: appdb
+      database: chist_users
       owner: dbadmin
       secret:
         name: cnpg-app-credentials
+      postInitSQL:
+        - CREATE DATABASE chist_reports   OWNER dbadmin;
+        - CREATE DATABASE chist_verification OWNER dbadmin;
+        - CREATE DATABASE chist_notif     OWNER dbadmin;
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"

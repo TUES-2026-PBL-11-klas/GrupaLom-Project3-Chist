@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-report
   pullPolicy: Always
-  tag: "latest"
+  tag: 'd4e4db4'
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,11 +29,11 @@ ingress:
 
 resources:
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 20m
+    memory: 64Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 100m
+    memory: 128Mi
 
 livenessProbe:
   httpGet:
@@ -62,7 +62,9 @@ affinity: {}
 
 envFrom:
   - secretRef:
-      name: backend-secret
+      name: secret-report
+  - secretRef:
+      name: rabbitmq-secret
 
 httpRoute:
   enabled: false

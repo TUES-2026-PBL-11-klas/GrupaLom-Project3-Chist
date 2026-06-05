@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-verification
   pullPolicy: Always
-  tag: "latest"
+  tag: '7017bfd'
 
 imagePullSecrets: []
 nameOverride: ""
@@ -25,19 +25,11 @@ service:
   port: 8083
 
 ingress:
-  enabled: true
-  className: nginx
-  annotations: {}
-  hosts:
-    - host: "4.165.174.62.nip.io"
-      paths:
-        - path: /api/verifications
-          pathType: Prefix
-  tls: []
+  enabled: false
 
 resources:
   requests:
-    cpu: 75m
+    cpu: 100m
     memory: 256Mi
   limits:
     cpu: 500m
@@ -47,7 +39,7 @@ livenessProbe:
   httpGet:
     path: /actuator/health
     port: 8083
-  initialDelaySeconds: 120
+  initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
 
@@ -55,7 +47,7 @@ readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8083
-  initialDelaySeconds: 120
+  initialDelaySeconds: 90
   periodSeconds: 15
   failureThreshold: 5
 
@@ -70,7 +62,10 @@ affinity: {}
 
 envFrom:
   - secretRef:
-      name: backend-secret
+      name: secret-verification
+  - secretRef:
+      name: rabbitmq-secret
 
 httpRoute:
   enabled: false
+

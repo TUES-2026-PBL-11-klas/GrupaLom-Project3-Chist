@@ -1,5 +1,10 @@
+output "kubelet_object_id" {
+  description = "Object ID of the AKS kubelet managed identity – used by AKV access policy"
+  value       = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+}
+
 output "aks_cluster_name" { value = azurerm_kubernetes_cluster.aks.name }
-output "kube_config_raw"  {
+output "kube_config_raw" {
   value     = azurerm_kubernetes_cluster.aks.kube_config_raw
   sensitive = true
 }

@@ -27,40 +27,13 @@ output "cnpg_connection_host" {
   value = "cnpg-cluster-rw.db.svc.cluster.local"
 }
 
-output "vault_public_url" {
-  value = module.hcp.vault_public_url
+# Azure Key Vault
+output "key_vault_name" {
+  description = "Name of the Azure Key Vault – use in GitHub Actions AZURE_KEY_VAULT_NAME secret"
+  value       = module.akv.key_vault_name
 }
 
-output "vault_cluster_id" {
-  value = module.hcp.vault_cluster_id
-}
-
-output "github_actions_role_id" {
-  value     = module.vault.github_actions_role_id
-  sensitive = true
-}
-
-output "github_actions_secret_id" {
-  value     = module.vault.github_actions_secret_id
-  sensitive = true
-}
-
-output "backend_role_id" {
-  value     = module.vault.backend_role_id
-  sensitive = true
-}
-
-output "backend_secret_id" {
-  value     = module.vault.backend_secret_id
-  sensitive = true
-}
-
-output "developer_role_id" {
-  value     = module.vault.developer_role_id
-  sensitive = true
-}
-
-output "developer_secret_id" {
-  value     = module.vault.developer_secret_id
-  sensitive = true
+output "key_vault_uri" {
+  description = "URI of the Azure Key Vault"
+  value       = module.akv.key_vault_uri
 }

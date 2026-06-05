@@ -3,18 +3,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = var.location
   resource_group_name = var.rg_name
   dns_prefix          = "${var.project_name}-${var.environment}"
-  kubernetes_version  = "1.32"
+  kubernetes_version  = "1.33"
   sku_tier            = "Free"
 
-default_node_pool {
-  name                        = "default"
-  temporary_name_for_rotation = "temppool"
-  node_count                  = 1
-  vm_size                     = var.aks_node_vm_size
-  vnet_subnet_id              = var.aks_subnet_id
-  orchestrator_version        = "1.32"
-  max_pods                    = 60
-}
+  default_node_pool {
+    name                        = "default"
+    temporary_name_for_rotation = "temppool"
+    node_count                  = 1
+    vm_size                     = var.aks_node_vm_size
+    vnet_subnet_id              = var.aks_subnet_id
+    orchestrator_version        = "1.33"
+    max_pods                    = 60
+  }
 
   identity {
     type = "SystemAssigned"
@@ -30,6 +30,11 @@ default_node_pool {
   tags = {
     Environment = var.environment
     Project     = var.project_name
+  }
+  lifecycle {
+    ignore_changes = [
+      default_node_pool[0].upgrade_settings
+    ]
   }
 }
 
@@ -59,6 +64,10 @@ resource "azurerm_network_security_rule" "allow_http" {
   resource_group_name         = "MC_${var.rg_name}_${azurerm_kubernetes_cluster.aks.name}_${var.location}"
   network_security_group_name = data.azurerm_resources.aks_nsg.resources[0].name
   depends_on                  = [azurerm_kubernetes_cluster.aks]
+  lifecycle {
+    ignore_changes        = [network_security_group_name]
+    create_before_destroy = false
+  }
 }
 
 resource "azurerm_network_security_rule" "allow_https" {
@@ -74,4 +83,8 @@ resource "azurerm_network_security_rule" "allow_https" {
   resource_group_name         = "MC_${var.rg_name}_${azurerm_kubernetes_cluster.aks.name}_${var.location}"
   network_security_group_name = data.azurerm_resources.aks_nsg.resources[0].name
   depends_on                  = [azurerm_kubernetes_cluster.aks]
+  lifecycle {
+    ignore_changes        = [network_security_group_name]
+    create_before_destroy = false
+  }
 }

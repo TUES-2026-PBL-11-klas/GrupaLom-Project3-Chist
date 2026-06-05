@@ -20,7 +20,7 @@ COPY --from=build-stage /app/target/*.jar app.jar
 
 USER spring
 
-# EXPOSE is documentation only — actual port set via SERVER_PORT_NOTIFICATION in docker-compose
-EXPOSE 8082
+# EXPOSE is documentation only — actual port set via SERVER_PORT_VERIFICATION in docker-compose
+EXPOSE 8083
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,135 +1,83 @@
 variable "location" {
-  description = "Azure region"
-  type        = string
-  default     = "germanywestcentral"
+  type = string
 }
 
 variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = "dev"
+  type = string
 }
 
 variable "project_name" {
-  description = "Project name used for resource naming"
-  type        = string
-  default     = "chist"
+  type = string
 }
 
 variable "vnet_cidr" {
-  description = "CIDR block for the VNet"
-  type        = string
-  default     = "10.0.0.0/16"
+  type = string
 }
 
 variable "public_subnet_cidr" {
-  description = "CIDR for public subnet"
-  type        = string
-  default     = "10.0.1.0/24"
+  type = string
 }
 
 variable "aks_subnet_cidr" {
-  description = "CIDR for AKS subnet"
-  type        = string
-  default     = "10.0.10.0/24"
+  type = string
 }
 
 variable "db_subnet_cidr" {
-  description = "CIDR for database subnet"
-  type        = string
-  default     = "10.0.20.0/24"
-}
-
-variable "acr_repositories" {
-  description = "List of image repository names"
-  type        = list(string)
-  default     = ["frontend", "backend"]
+  type = string
 }
 
 variable "db_name" {
-  description = "PostgreSQL database name"
-  type        = string
-  default     = "appdb"
+  type = string
 }
 
 variable "db_username" {
-  description = "PostgreSQL admin username"
-  type        = string
-  default     = "dbadmin"
+  type = string
 }
 
 variable "db_password" {
-  description = "Database password"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "aks_node_vm_size" {
-  description = "VM size for AKS nodes"
-  type        = string
-  default     = "Standard_B2s"
+  type = string
 }
 
 variable "argocd_hostname" {
-  description = "Hostname for ArgoCD ingress"
-  type        = string
-  default     = "argocd.chist.dev"
+  type = string
 }
 
 variable "jwt_secret" {
-  description = "JWT signing secret"
-  type        = string
-  sensitive   = true
-}
-
-variable "computer_vision_endpoint" {
-  description = "Azure Computer Vision endpoint URL"
-  type        = string
-  default     = ""
-}
-
-variable "computer_vision_key" {
-  description = "Azure Computer Vision API key"
-  type        = string
-  sensitive   = true
-  default     = ""
-}
-
-variable "acr_registry" {
-  description = "ACR login server"
-  type        = string
-}
-
-variable "acr_username" {
-  description = "ACR admin username"
-  type        = string
-}
-
-variable "acr_password" {
-  description = "ACR admin password"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "mail_host" {
-  description = "SMTP mail host"
-  type        = string
-  default     = "smtp.gmail.com"
+  type = string
 }
 
 variable "mail_port" {
-  description = "SMTP mail port"
-  type        = string
-  default     = "587"
+  type = string
 }
 
 variable "mail_username" {
-  description = "SMTP mail username"
-  type        = string
+  type = string
 }
 
 variable "mail_password" {
-  description = "SMTP mail password"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
+}
+
+variable "rabbitmq_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "github_actions_object_id" {
+  type = string
+}
+
+variable "github_actions_client_id" {
+  type = string
 }

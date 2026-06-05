@@ -24,6 +24,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,5 +101,30 @@ class AuthServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> authService.login(authRequest));
+    }
+
+    @Test
+    void register_notificationServiceDown_stillSucceeds() {
+        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+        doThrow(new RuntimeException("notification down"))
+                .when(restTemplate).postForObject(anyString(), isNull(), eq(String.class));
+
+        AuthResponse response = authService.register(registerRequest);
+
+        assertEquals("testToken", response.getToken());
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void login_callsAuthenticationManager() {
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+
+        authService.login(authRequest);
+
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 }
