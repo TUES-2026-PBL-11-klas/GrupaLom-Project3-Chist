@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: acrchistdev.azurecr.io/chist-frontend
   pullPolicy: Always
-  tag: '911d4be'
+  tag: '6a44e1e'
 
 
 env:
