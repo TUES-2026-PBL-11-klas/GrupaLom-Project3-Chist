@@ -96,6 +96,17 @@ public class ReportService {
         reportRepository.deleteById(reportId);
     }
 
+    public Path getImagePath(UUID reportId) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ReportOrTaskNotFoundException("Report Not Found."));
+        if (report.getPhotoUrl() == null) return null;
+        String filename = Paths.get(report.getPhotoUrl()).getFileName().toString();
+        Path base = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path target = base.resolve(filename).normalize();
+        if (!target.startsWith(base)) return null; // path traversal guard
+        return target;
+    }
+
 
     private ReportResponse mapToDTO(Report report) {
         return ReportResponse.builder()

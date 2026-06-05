@@ -6,11 +6,16 @@ import com.chist.reportmodule.dto.ReportResponse;
 import com.chist.reportmodule.model.ReportStatus;
 import com.chist.reportmodule.service.ReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,6 +71,20 @@ public class ReportController {
             @PathVariable UUID id,
             @RequestParam ReportStatus status) {
         return ResponseEntity.ok(reportService.updateStatus(id, status));
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Resource> getReportImage(@PathVariable UUID id) throws IOException {
+        Path imagePath = reportService.getImagePath(id);
+        if (imagePath == null) return ResponseEntity.notFound().build();
+
+        Resource resource = new FileSystemResource(imagePath);
+        if (!resource.exists() || !resource.isReadable()) return ResponseEntity.notFound().build();
+
+        String contentType = Files.probeContentType(imagePath);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType != null ? contentType : "image/jpeg"))
+                .body(resource);
     }
 
     @DeleteMapping("/{id}")

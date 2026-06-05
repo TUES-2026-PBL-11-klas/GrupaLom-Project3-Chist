@@ -20,7 +20,7 @@ interface ReportCardProps {
 export function ReportCard({ report, selected, onSelect }: ReportCardProps) {
   const tSev = useTranslations("Severity");
   const sev = SEVERITY_STYLES[report.severity] ?? SEVERITY_STYLES.medium;
-  const imageProxyUrl = report.photoUrl ? `/api/proxy${report.photoUrl}` : null;
+  const imageProxyUrl = report.photoUrl ? `/api/proxy/api/reports/${report.id}/image` : null;
   return (
     <button
       onClick={onSelect}
