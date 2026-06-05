@@ -81,3 +81,8 @@ variable "key_vault_name" {
   description = "Name of the Azure Key Vault"
   type        = string
 }
+
+variable "cors_allowed_origins" {
+  description = "Comma-separated list of allowed CORS origins for backend services"
+  type        = string
+}

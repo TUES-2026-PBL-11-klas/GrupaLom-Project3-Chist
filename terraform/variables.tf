@@ -81,3 +81,8 @@ variable "github_actions_object_id" {
 variable "github_actions_client_id" {
   type = string
 }
+
+variable "cors_allowed_origins" {
+  description = "Comma-separated CORS origins allowed by backend services"
+  type        = string
+}

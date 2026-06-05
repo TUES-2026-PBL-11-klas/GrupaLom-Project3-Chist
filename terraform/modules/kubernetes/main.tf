@@ -159,7 +159,8 @@ resource "kubernetes_secret" "secret_user" {
     COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
     COMPUTER_VISION_KEY      = var.computer_vision_key
 
-    AZURE_KEY_VAULT_NAME = var.key_vault_name
+    APP_CORS_ALLOWED_ORIGINS = var.cors_allowed_origins
+    AZURE_KEY_VAULT_NAME     = var.key_vault_name
   }
 }
 
@@ -180,7 +181,8 @@ resource "kubernetes_secret" "secret_report" {
     COMPUTER_VISION_ENDPOINT = var.computer_vision_endpoint
     COMPUTER_VISION_KEY      = var.computer_vision_key
 
-    AZURE_KEY_VAULT_NAME = var.key_vault_name
+    APP_CORS_ALLOWED_ORIGINS = var.cors_allowed_origins
+    AZURE_KEY_VAULT_NAME     = var.key_vault_name
   }
 }
 
