@@ -48,7 +48,7 @@ public class AuthService {
             // Registration should succeed even if the notification service is unavailable
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getUuid());
         return new AuthResponse(token);
     }
 
@@ -62,7 +62,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User or Password not correct."));
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getUuid());
         return new AuthResponse(token);
     }
 }
