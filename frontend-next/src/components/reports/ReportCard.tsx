@@ -20,6 +20,7 @@ interface ReportCardProps {
 export function ReportCard({ report, selected, onSelect }: ReportCardProps) {
   const tSev = useTranslations("Severity");
   const sev = SEVERITY_STYLES[report.severity] ?? SEVERITY_STYLES.medium;
+  const imageProxyUrl = report.photoUrl ? `/api/proxy${report.photoUrl}` : null;
   return (
     <button
       onClick={onSelect}
@@ -38,6 +39,14 @@ export function ReportCard({ report, selected, onSelect }: ReportCardProps) {
         </span>
         <span className="text-text-3 text-[10px] ml-auto">{report.time}</span>
       </div>
+      {imageProxyUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={imageProxyUrl}
+          alt="Report photo"
+          className="rounded-lg w-full object-cover h-28 mb-1.5"
+        />
+      )}
       <div className="text-text-1 text-sm line-clamp-2">{report.description}</div>
       <div className="flex items-center gap-1 mt-1 text-[11px] text-text-3">
         <MapPin size={11} /> {report.district}

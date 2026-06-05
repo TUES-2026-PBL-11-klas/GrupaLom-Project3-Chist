@@ -51,6 +51,9 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_PROFILES_ACTIVE: dev
       USER_SERVICE_URL: http://user-module:8080
+      APP_UPLOAD_DIR: /app/uploads/reports
+    volumes:
+      - report_uploads:/app/uploads/reports
 
   notification-module:
     build:
@@ -119,3 +122,4 @@ services:
 
 volumes:
   postgres_data:
+  report_uploads:
