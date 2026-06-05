@@ -19,6 +19,7 @@ export interface User {
 export interface Report {
   id: string;
   reportId?: string;
+  userId?: string;
   title: string;
   location: string;
   district: string;
@@ -88,6 +89,7 @@ export function mapApiReport(data: Record<string, unknown>): Report {
   return {
     id,
     reportId: data.reportId as string | undefined,
+    userId: (data.userId as string) ?? undefined,
     title: desc ? desc.slice(0, 50) : "",
     location: `${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E`,
     district: (data.district as string) ?? "",

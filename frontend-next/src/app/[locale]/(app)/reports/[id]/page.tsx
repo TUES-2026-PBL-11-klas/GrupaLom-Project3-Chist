@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { reportsApi, isUnauthorized, ApiError } from "@/lib/api";
-import { mapApiReport, type Report } from "@/lib/api/mappers";
+import { reportsApi, usersApi, isUnauthorized } from "@/lib/api";
+import { mapApiReport, mapApiUser, type Report } from "@/lib/api/mappers";
 import { claimReport, completeReport, confirmReport } from "@/lib/actions/reports";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, Flame, User } from "lucide-react";
@@ -30,12 +30,25 @@ export default async function ReportDetail({
 
   if (!report) notFound();
 
+  let reporterName = report.reporter;
+  if (!reporterName && report.userId) {
+    try {
+      const rawUser = (await usersApi.getById(report.userId)) as Record<string, unknown>;
+      const user = mapApiUser(rawUser);
+      reporterName = user.name;
+    } catch {
+      // user lookup failed — leave name empty
+    }
+  }
+
   const claimAction = claimReport.bind(null, report.id);
   const completeWithEmpty = async () => {
     "use server";
     await completeReport(report.id, new FormData());
   };
   const confirmAction = confirmReport.bind(null, report.id);
+
+  const imageProxyUrl = report.photoUrl ? `/api/proxy${report.photoUrl}` : null;
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
@@ -59,8 +72,17 @@ export default async function ReportDetail({
           <MapPin size={14} /> {report.district} · {report.location}
         </div>
         <div className="flex items-center gap-1.5 text-text-3 text-sm">
-          <User size={14} /> {report.reporter || tRD("unknownReporter")}
+          <User size={14} /> {reporterName || tRD("unknownReporter")}
         </div>
+
+        {imageProxyUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageProxyUrl}
+            alt="Report photo"
+            className="rounded-xl w-full object-cover max-h-80"
+          />
+        )}
 
         <div className="flex flex-wrap gap-2 pt-2">
           {report.status === "open" && (
