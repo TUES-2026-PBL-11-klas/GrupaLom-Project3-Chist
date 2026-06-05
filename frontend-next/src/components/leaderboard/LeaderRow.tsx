@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Flame, Paintbrush, Trophy } from "lucide-react";
+import { Check, Flame, Paintbrush, Trophy, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { LeaderboardUser } from "@/lib/api/mappers";
 
@@ -61,7 +61,9 @@ export function LeaderRow({ user, isMe, index, sortBy }: { user: LeaderboardUser
         {sortBy === "awards" && user.earnedBadges.length > 0 && (
           <div className="flex items-center gap-1 mt-1 text-text-3 text-xs">
             {user.earnedBadges.slice(0, 3).map((b) => (
-              <span key={b.id} title={tBadges(`${b.id}.name` as `${string}.name`)}>★</span>
+              <span key={b.id} title={tBadges(`${b.id}.name` as `${string}.name`)} className="text-accent-pink">
+                <Star size={11} strokeWidth={2} className="inline fill-current" />
+              </span>
             ))}
             {user.earnedBadges.length > 3 && <span className="text-text-3">+{user.earnedBadges.length - 3}</span>}
           </div>
