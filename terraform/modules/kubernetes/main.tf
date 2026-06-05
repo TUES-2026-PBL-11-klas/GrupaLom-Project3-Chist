@@ -31,42 +31,21 @@ resource "helm_release" "cnpg_operator" {
   wait             = true
   timeout          = 300
 }
-# ── RabbitMQ ─────────────────────────────────────────────────
-resource "helm_release" "rabbitmq" {
-  name             = "rabbitmq"
-  repository       = "oci://registry-1.docker.io/bitnamicharts"
-  chart            = "rabbitmq"
-  version          = "16.0.14"
-  namespace        = "rabbitmq"
-  create_namespace = true
-  wait             = true
-  timeout          = 600
+# ── RabbitMQ namespace (owned by Terraform; chart owned by ArgoCD) ───
+resource "kubernetes_namespace" "rabbitmq" {
+  metadata { name = "rabbitmq" }
+}
 
-  values = [yamlencode({
-    global = {
-      imageRegistry = "acrchistdev.azurecr.io"
-      security = {
-        allowInsecureImages = true
-      }
-    }
-    auth = {
-      username = "chist"
-      password = var.rabbitmq_password
-    }
-    persistence = {
-      enabled = true
-      size    = "1Gi"
-    }
-    resources = {
-      requests = { cpu = "100m", memory = "256Mi" }
-      limits   = { cpu = "500m", memory = "512Mi" }
-    }
-    service = {
-      type = "ClusterIP"
-    }
-  })]
-
-  depends_on = [helm_release.nginx_ingress]
+# Password secret used by the ArgoCD-managed RabbitMQ chart (existingPasswordSecret).
+# Must live in the rabbitmq namespace alongside the pod.
+resource "kubernetes_secret" "rabbitmq_auth_secret" {
+  metadata {
+    name      = "rabbitmq-secret"
+    namespace = kubernetes_namespace.rabbitmq.metadata[0].name
+  }
+  data = {
+    RABBITMQ_PASSWORD = var.rabbitmq_password
+  }
 }
 
 # ── ArgoCD ───────────────────────────────────────────────────
@@ -157,16 +136,18 @@ resource "kubernetes_secret" "cnpg_app_credentials" {
 }
 
 # ── RabbitMQ connection secret (consumed by all services) ────
+# Keys use the SPRING_RABBITMQ_* prefix so Spring Boot relaxed binding
+# maps them to spring.rabbitmq.* without explicit application.yaml entries.
 resource "kubernetes_secret" "rabbitmq_secret" {
   metadata {
     name      = "rabbitmq-secret"
     namespace = kubernetes_namespace.chist.metadata[0].name
   }
   data = {
-    RABBITMQ_HOST     = "rabbitmq.rabbitmq.svc.cluster.local"
-    RABBITMQ_PORT     = "5672"
-    RABBITMQ_USER     = "chist"
-    RABBITMQ_PASSWORD = var.rabbitmq_password
+    SPRING_RABBITMQ_HOST     = "rabbitmq.rabbitmq.svc.cluster.local"
+    SPRING_RABBITMQ_PORT     = "5672"
+    SPRING_RABBITMQ_USERNAME = "chist"
+    SPRING_RABBITMQ_PASSWORD = var.rabbitmq_password
   }
 }
 
