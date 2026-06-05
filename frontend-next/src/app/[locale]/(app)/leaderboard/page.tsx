@@ -17,7 +17,7 @@ export default async function LeaderboardPage({ params }: { params: Promise<{ lo
     users = (lbRaw ?? []).map((u, i) => mapLeaderboardUser(u, i + 1));
   } catch (err) {
     if (isUnauthorized(err)) redirect(`/${locale}/login`);
-    throw err;
+    // Other errors: show empty leaderboard rather than crashing
   }
 
   return <LeaderboardClient users={users} me={me!} />;

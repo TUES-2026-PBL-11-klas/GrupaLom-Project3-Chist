@@ -4,6 +4,17 @@ import { mockResponse } from "@/lib/mock/dispatcher";
 import { resolveBackendBase } from "./backend-url";
 import { ApiError, UnauthorizedError } from "./errors";
 
+function extractUuidFromJwt(token: string): string | null {
+  try {
+    const payload = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64url").toString("utf8")
+    );
+    return typeof payload.uuid === "string" ? payload.uuid : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function serverFetch<T = unknown>(path: string, init?: RequestInit): Promise<T> {
   const token = await getSessionToken();
 
@@ -12,9 +23,11 @@ export async function serverFetch<T = unknown>(path: string, init?: RequestInit)
     res = mockResponse(path, init);
   } else {
     const isFormData = init?.body instanceof FormData;
+    const userId = token ? extractUuidFromJwt(token) : null;
     const headers: Record<string, string> = {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(userId ? { "X-User-Id": userId } : {}),
       ...((init?.headers ?? {}) as Record<string, string>),
     };
     res = await fetch(`${resolveBackendBase(path)}${path}`, {

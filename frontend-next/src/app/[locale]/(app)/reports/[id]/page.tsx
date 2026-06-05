@@ -25,8 +25,7 @@ export default async function ReportDetail({
     report = mapApiReport(raw);
   } catch (err) {
     if (isUnauthorized(err)) redirect(`/${locale}/login`);
-    if (err instanceof ApiError && err.status === 404) notFound();
-    throw err;
+    notFound();
   }
 
   if (!report) notFound();

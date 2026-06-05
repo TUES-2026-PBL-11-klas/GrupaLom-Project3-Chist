@@ -24,18 +24,15 @@ export const reportsApi = {
   create: (formData: FormData) =>
     serverFetch("/reports", { method: "POST", body: formData }),
   claim: (id: string | number) =>
-    serverFetch(`/reports/${id}/claim`, { method: "PATCH" }),
-  complete: (id: string | number, formData: FormData) =>
-    serverFetch(`/reports/${id}/complete`, { method: "POST", body: formData }),
+    serverFetch(`/reports/${id}/status?status=IN_PROGRESS`, { method: "PATCH" }),
+  complete: (id: string | number, _formData: FormData) =>
+    serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
   confirm: (id: string | number) =>
-    serverFetch(`/reports/${id}/confirm`, { method: "POST" }),
-  flag: (id: string | number, reason: string) =>
-    serverFetch(`/reports/${id}/flag`, {
-      method: "POST",
-      body: JSON.stringify({ reason }),
-    }),
-  mapPins: (bounds: string) =>
-    serverFetch(`/reports/map?bounds=${encodeURIComponent(bounds)}`),
+    serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
+  flag: (id: string | number, _reason: string) =>
+    Promise.resolve(),
+  mapPins: () =>
+    serverFetch("/reports"),
 };
 
 export const usersApi = {

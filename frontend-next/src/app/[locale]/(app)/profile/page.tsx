@@ -10,9 +10,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   try {
     const raw = (await usersApi.getMe()) as Record<string, unknown>;
     user = mapApiUser(raw);
-  } catch (err) {
-    if (isUnauthorized(err)) redirect(`/${locale}/login`);
-    throw err;
+  } catch {
+    redirect(`/${locale}/login`);
   }
 
   return <ProfileClient user={user} />;

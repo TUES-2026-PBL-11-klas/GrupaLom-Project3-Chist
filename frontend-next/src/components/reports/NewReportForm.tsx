@@ -109,7 +109,7 @@ export function NewReportForm() {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="photo" className="text-text-2 text-xs uppercase tracking-wider">{t("photo")}</Label>
-        <Input id="photo" name="photo" type="file" accept="image/*" />
+        <Input id="photo" name="image" type="file" accept="image/*" />
       </div>
 
       {error && <p className="text-status-red text-sm">{error}</p>}

@@ -82,7 +82,7 @@ export function mapApiReport(data: Record<string, unknown>): Report {
   const rawStatus = ((data.status as string) ?? "open").toUpperCase();
   let status: Report["status"] = "open";
   if (rawStatus === "IN_PROGRESS" || rawStatus === "IN-PROGRESS") status = "in-progress";
-  else if (rawStatus === "DONE" || rawStatus === "COMPLETED") status = "done";
+  else if (rawStatus === "DONE" || rawStatus === "COMPLETED" || rawStatus === "CLEANED") status = "done";
   else if (rawStatus === "OPEN" || rawStatus === "NEW") status = "open";
 
   return {
