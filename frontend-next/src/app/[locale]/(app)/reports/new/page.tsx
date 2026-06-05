@@ -7,7 +7,7 @@ export default async function NewReportPage({ params }: { params: Promise<{ loca
   const { locale } = await params;
   const t = await getTranslations("NewReport");
   return (
-    <main className="anim-fade-up max-w-xl mx-auto px-4 py-8 flex flex-col gap-6">
+    <main className="anim-fade-up max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
       <Link href={`/${locale}/reports`} className="text-text-3 text-xs uppercase tracking-wider hover:text-text-1 flex items-center gap-1.5 w-fit">
         <ArrowLeft size={14} /> {t("back")}
       </Link>

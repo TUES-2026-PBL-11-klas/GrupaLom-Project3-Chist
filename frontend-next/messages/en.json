@@ -197,6 +197,11 @@
     "photo": "Photo (optional)",
     "submit": "Submit report",
     "submitting": "Submitting...",
-    "failure": "Submission failed"
+    "failure": "Submission failed",
+    "pickLocation": "Location",
+    "pickLocationHint": "Click the map to drop a pin",
+    "useMyLocation": "Use my location",
+    "locating": "Locating…",
+    "locationError": "Could not get your location"
   }
 }
