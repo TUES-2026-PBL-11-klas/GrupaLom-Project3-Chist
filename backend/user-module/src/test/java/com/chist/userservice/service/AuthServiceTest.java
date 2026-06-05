@@ -66,7 +66,7 @@ class AuthServiceTest {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
-        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+        when(jwtService.generateToken(anyString(), any(UUID.class))).thenReturn("testToken");
 
         AuthResponse response = authService.register(registerRequest);
 
@@ -86,7 +86,7 @@ class AuthServiceTest {
     @Test
     void login_success() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
-        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+        when(jwtService.generateToken(anyString(), any(UUID.class))).thenReturn("testToken");
 
         AuthResponse response = authService.login(authRequest);
 
@@ -108,7 +108,7 @@ class AuthServiceTest {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
-        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+        when(jwtService.generateToken(anyString(), any(UUID.class))).thenReturn("testToken");
         doThrow(new RuntimeException("notification down"))
                 .when(restTemplate).postForObject(anyString(), isNull(), eq(String.class));
 
@@ -121,7 +121,7 @@ class AuthServiceTest {
     @Test
     void login_callsAuthenticationManager() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
-        when(jwtService.generateToken(anyString())).thenReturn("testToken");
+        when(jwtService.generateToken(anyString(), any(UUID.class))).thenReturn("testToken");
 
         authService.login(authRequest);
 
