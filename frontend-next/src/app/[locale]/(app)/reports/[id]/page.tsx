@@ -47,7 +47,7 @@ export default async function ReportDetail({
   };
   const confirmAction = confirmReport.bind(null, report.id);
 
-  const imageProxyUrl = report.photoUrl ? `/api/proxy${report.photoUrl}` : null;
+  const imageProxyUrl = report.photoUrl ? `/api/proxy/api/reports/${report.id}/image` : null;
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
