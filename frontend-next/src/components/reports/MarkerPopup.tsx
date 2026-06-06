@@ -22,7 +22,7 @@ export function MarkerPopup({ report, locale }: MarkerPopupProps) {
 
   return (
     <div className="rounded-2xl bg-bg-surface border border-brand-border overflow-hidden text-text-1 w-[320px]">
-      <div className="px-4 py-3 border-b border-brand-border" style={{ background: `${color}1f` }}>
+      <div className="px-4 py-3 pr-9 border-b border-brand-border" style={{ background: `${color}1f` }}>
         <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest" style={{ color }}>
           <Flame size={12} />
           {tSev(report.severity as "critical" | "high" | "medium" | "low")}

@@ -33,7 +33,7 @@ export function LocaleSwitcher() {
         className="bg-transparent text-text-2 uppercase tracking-wider text-xs outline-none cursor-pointer hover:text-text-1"
       >
         {routing.locales.map((l) => (
-          <option key={l} value={l} className="bg-bg-card text-text-1">
+          <option key={l} value={l} style={{ background: "#0f0f0f", color: "#ffffff" }}>
             {t(l)}
           </option>
         ))}

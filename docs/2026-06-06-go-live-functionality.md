@@ -62,16 +62,21 @@ the user-module internal endpoint and returns the updated report.
   detail pages.
 - [x] Report detail page shows **Claim** (status open) and **Mark complete**
   (status in-progress); completing flips the report to done.
-- [ ] **Points feedback toast.** After completing, surface "you earned 50 points"
-  so the reward is visible immediately (the navbar doesn't show points; profile/
-  rewards do). Plan: `completeReport` returns the awarded amount → detail page's
-  server action `redirect`s to `?earned=50` → a small client `CompletionToast`
-  reads the param, pushes a success notification (`NotificationBridge`), and
-  strips the query. New i18n key `ReportDetail.pointsEarned`.
-- [ ] **"Confirm sighting" button** currently also maps to `CLEANED` (duplicate of
-  complete) — there is **no real "confirm/verify sighting" endpoint**. Decide:
-  remove the button, or wire it to the verification-module (`/api/verifications`).
-  Pending owner decision; not blocking the points loop.
+- [x] **Points feedback toast.** `completeReport` returns the awarded amount;
+  the detail page's complete action `redirect`s to `?earned=50`; the new client
+  `CompletionToast` reads the param, pushes a success notification
+  (`NotificationBridge`), and strips the query. New i18n key
+  `ReportDetail.pointsEarned` (en + bg). Note: `POINTS_PER_COMPLETION` is a
+  non-exported const — `actions/reports.ts` is `"use server"`, so every *export*
+  must be an async function (a stray `export const` makes the whole module export
+  nothing and breaks the build).
+- [x] **"Confirm sighting" button removed.** It mapped to `CLEANED` (silently
+  completing + awarding points), and there is no real "confirm sighting" endpoint.
+  Removed the button, the `confirmReport` action, and `reportsApi.confirm`.
+- [x] **Claim button restyled** to the bordered look with hover: white background,
+  **black text by default, magenta on hover**, subtle hover background
+  (`border border-brand-border bg-white text-black hover:bg-bg-card-hover
+  hover:text-magenta`).
 
 ## 3. Real-backend connectivity (users, register, reports)
 
@@ -84,11 +89,11 @@ Most of this is already wired — verifying it holds end-to-end.
 - [x] **Create a new report.** `NewReportForm` → `createReport` action →
   `POST /api/reports` (multipart, image saved to report-module upload volume).
 - [x] **Fetch users / leaderboard** from the DB (`/users/leaderboard`, `/users/me`).
-- [ ] **Local dev `.env.local`.** No `.env*` is committed (only `.env.example`).
-  Add `frontend-next/.env.local` for `npm run dev` against a locally-running
-  backend (localhost:8080–8083, each with `/api`). **HOSTED:** the deployed
-  frontend already gets these via docker-compose / Helm env — confirm they are
-  present and correct in the hosted environment (see §5).
+- [x] **Local dev `.env.local`.** Added `frontend-next/.env.local` (gitignored)
+  pointing at localhost:8080–8083, each with `/api`, for `npm run dev` against a
+  locally-running backend. **HOSTED:** the deployed frontend already gets these
+  via docker-compose / Helm env — confirm they are present and correct in the
+  hosted environment (see §5).
 - [ ] **`/api` prefix sanity.** `login`/`register` routes use `BACKEND_URL`
   directly (must point at the user-module **with `/api`**). Everything else uses
   the per-module vars. Confirm both forms resolve correctly in the hosted env.
@@ -96,11 +101,11 @@ Most of this is already wired — verifying it holds end-to-end.
 ## 4. Verification gate (run before commit)
 
 From `frontend-next/`:
-- [ ] `npx tsc --noEmit`
-- [ ] `npm test`
-- [ ] `npm run build`
-- Note pre-existing lint errors unrelated to this work: `MapView.tsx`,
-  `RewardsClient.tsx`.
+- [x] `npx tsc --noEmit` — clean.
+- [x] `npm test` — these changes add **no new failures**. 3 failures are
+  pre-existing on clean `dev` (verified by stashing): `server.test.ts` body
+  double-read, plus `session.test.ts` / auth `route.test.ts` collection errors.
+- [x] `npm run build` — succeeds (21 routes).
 
 ## 5. Hosted-environment checklist (so it works where it's deployed)
 
@@ -116,6 +121,5 @@ From `frontend-next/`:
 
 ## 6. Open decisions
 
-- "Confirm sighting" button: remove vs. wire to verification module (§2).
 - Whether to keep the async photo/verification path (100 pts) available later in
   addition to the instant 50-pt status path.

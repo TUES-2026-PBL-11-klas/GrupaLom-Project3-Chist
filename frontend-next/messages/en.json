@@ -59,7 +59,9 @@
     "loadingMap": "Loading map…",
     "streakDays": "{n}-day streak",
     "streakLabel": "Streak",
-    "signalsLabel": "Signals"
+    "signalsLabel": "Signals",
+    "showMap": "Map",
+    "showList": "List"
   },
   "ReportDetail": {
     "back": "back to reports",
@@ -67,7 +69,8 @@
     "markComplete": "Mark complete",
     "confirmSighting": "Confirm sighting",
     "unknownReporter": "—",
-    "openLink": "OPEN →"
+    "openLink": "OPEN →",
+    "pointsEarned": "Cleanup confirmed — you earned {n} points!"
   },
   "Levels": {
     "novice": "NOVICE",
