@@ -27,8 +27,6 @@ export const reportsApi = {
     serverFetch(`/reports/${id}/status?status=IN_PROGRESS`, { method: "PATCH" }),
   complete: (id: string | number, _formData: FormData) =>
     serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
-  confirm: (id: string | number) =>
-    serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
   flag: (id: string | number, _reason: string) =>
     Promise.resolve(),
   mapPins: () =>

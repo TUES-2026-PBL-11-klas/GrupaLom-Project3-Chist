@@ -14,13 +14,15 @@ export async function claimReport(id: string | number): Promise<void> {
   revalidatePath(`/[locale]/reports/${id}`, "page");
 }
 
-export async function completeReport(id: string | number, formData: FormData): Promise<void> {
+// Mirrors report-module's POINTS_PER_COMPLETION. The backend awards these points
+// synchronously when a report flips to CLEANED with an acting user; we surface
+// the amount so the UI can confirm the reward to the cleaner. Kept non-exported:
+// this is a "use server" module, where every *export* must be an async function.
+const POINTS_PER_COMPLETION = 50;
+
+export async function completeReport(id: string | number, formData: FormData): Promise<number> {
   await reportsApi.complete(id, formData);
   revalidatePath("/[locale]/reports", "page");
   revalidatePath(`/[locale]/reports/${id}`, "page");
-}
-
-export async function confirmReport(id: string | number): Promise<void> {
-  await reportsApi.confirm(id);
-  revalidatePath(`/[locale]/reports/${id}`, "page");
+  return POINTS_PER_COMPLETION;
 }
