@@ -59,7 +59,9 @@
     "loadingMap": "Зареждане на картата…",
     "streakDays": "{n}-дневна серия",
     "streakLabel": "Серия",
-    "signalsLabel": "Сигнали"
+    "signalsLabel": "Сигнали",
+    "showMap": "Карта",
+    "showList": "Списък"
   },
   "ReportDetail": {
     "back": "обратно към сигналите",
@@ -67,7 +69,8 @@
     "markComplete": "Маркирай готово",
     "confirmSighting": "Потвърди наблюдение",
     "unknownReporter": "—",
-    "openLink": "ОТВОРИ →"
+    "openLink": "ОТВОРИ →",
+    "pointsEarned": "Почистването е потвърдено — спечели {n} точки!"
   },
   "Levels": {
     "novice": "НОВИЧ",

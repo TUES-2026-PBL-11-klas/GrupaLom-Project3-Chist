@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ class ReportServiceTest {
 
     @Mock
     private ReportRepository reportRepository;
+
+    @Mock
+    private RestTemplate restTemplate;
 
     @InjectMocks
     private ReportService reportService;
@@ -96,7 +100,7 @@ class ReportServiceTest {
         when(reportRepository.findById(testId)).thenReturn(Optional.of(testReport));
         when(reportRepository.save(any(Report.class))).thenReturn(testReport);
 
-        ReportResponse response = reportService.updateStatus(testId, ReportStatus.IN_PROGRESS);
+        ReportResponse response = reportService.updateStatus(testId, ReportStatus.IN_PROGRESS, null);
 
         assertNotNull(response);
         verify(reportRepository).save(any(Report.class));
@@ -136,7 +140,7 @@ class ReportServiceTest {
     void updateStatus_notFound_throwsException() {
         when(reportRepository.findById(testId)).thenReturn(Optional.empty());
         assertThrows(ReportOrTaskNotFoundException.class,
-                () -> reportService.updateStatus(testId, ReportStatus.CLEANED));
+                () -> reportService.updateStatus(testId, ReportStatus.CLEANED, null));
     }
 
     @Test

@@ -27,8 +27,6 @@ export const reportsApi = {
     serverFetch(`/reports/${id}/status?status=IN_PROGRESS`, { method: "PATCH" }),
   complete: (id: string | number, _formData: FormData) =>
     serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
-  confirm: (id: string | number) =>
-    serverFetch(`/reports/${id}/status?status=CLEANED`, { method: "PATCH" }),
   flag: (id: string | number, _reason: string) =>
     Promise.resolve(),
   mapPins: () =>
@@ -40,6 +38,7 @@ export const usersApi = {
   updateMe: (p: Record<string, unknown>) =>
     serverFetch("/users/me", { method: "PATCH", body: JSON.stringify(p) }),
   getById: (id: string) => serverFetch(`/users/${id}`),
+  getPublicById: (id: string) => serverFetch(`/users/internal/${id}`),
   getBadges: () => serverFetch("/users/me/badges"),
   getActivity: (page = 0) =>
     serverFetch(`/users/me/activity?page=${page}&size=20`),

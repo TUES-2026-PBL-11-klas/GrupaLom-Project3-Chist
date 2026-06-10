@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Flame } from "lucide-react";
+import { useState } from "react";
+import { Flame, Map as MapIcon, List } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useApp } from "@/context/AppContext";
 import { ReportCard } from "./ReportCard";
@@ -25,6 +26,10 @@ interface ReportsClientProps {
 export function ReportsClient({ initialReports, user, locale }: ReportsClientProps) {
   const t = useTranslations("Reports");
   const { selectedReportId, selectReport, filters } = useApp();
+  // On narrow screens the list and the map can't share the viewport, so we
+  // toggle between them. `listOpen` defaults to the list; tapping the toggle
+  // reveals the map. On md+ both panes are always shown side by side.
+  const [listOpen, setListOpen] = useState(true);
 
   const filtered = initialReports.filter((r) => {
     if (filters.severity && r.severity !== filters.severity) return false;
@@ -33,8 +38,18 @@ export function ReportsClient({ initialReports, user, locale }: ReportsClientPro
   });
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-4rem)] p-4">
-      <aside className="w-full md:w-[360px] flex flex-col gap-3 overflow-y-auto">
+    <div className="relative flex flex-col md:flex-row gap-4 h-[calc(100vh-4rem)] p-4">
+      <button
+        type="button"
+        onClick={() => setListOpen((o) => !o)}
+        className="md:hidden absolute top-6 right-6 z-20 inline-flex items-center gap-1.5 rounded-full border border-brand-border bg-bg-surface px-3 py-1.5 text-xs uppercase tracking-wider text-text-1 shadow-lg"
+      >
+        {listOpen ? <MapIcon size={14} /> : <List size={14} />}
+        {listOpen ? t("showMap") : t("showList")}
+      </button>
+      <aside
+        className={`${listOpen ? "flex" : "hidden"} md:flex w-full md:w-[360px] flex-col gap-3 overflow-y-auto`}
+      >
         <div className="grid grid-cols-2 gap-2">
           <div className="rounded-xl border border-brand-border bg-bg-card px-3 py-2.5">
             <div className="text-text-1 text-xl leading-none">{filtered.length}</div>
@@ -63,7 +78,9 @@ export function ReportsClient({ initialReports, user, locale }: ReportsClientPro
           </div>
         )}
       </aside>
-      <div className="flex-1 rounded-2xl overflow-hidden border border-brand-border bg-bg-card">
+      <div
+        className={`${listOpen ? "hidden" : "block"} md:block flex-1 min-h-0 rounded-2xl overflow-hidden border border-brand-border bg-bg-card`}
+      >
         <MapView
           reports={filtered}
           selectedId={selectedReportId}
