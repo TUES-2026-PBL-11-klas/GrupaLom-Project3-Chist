@@ -82,7 +82,7 @@ public class CleaningTaskService {
                 .longitude(report.getLongitude())
                 .build());
 
-        return mapToDTO(saved);
+        return "";//mapToDTO(saved);
     }
 
     private CleaningTaskResponse mapToDTO(CleaningTask cleaningTask){
